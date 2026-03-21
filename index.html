@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>AION2 체크리스트</title>
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#4abde8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AION2">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<!-- 애드센스: 승인 후 YOUR_PUB_ID를 본인 ca-pub-xxxxxxx로 교체하세요 -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUB_ID" crossorigin="anonymous"></script> -->
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary:#e8f6fc;--bg-secondary:#d0edfa;--bg-card:#ffffff;--bg-card-hover:#f0faff;
+    --border:#b8ddf0;--border-light:#d4ecf7;--text-primary:#2a5a7a;--text-secondary:#5a8faa;
+    --text-muted:#8bb8d0;--accent-blue:#4abde8;--accent-sky:#7dd3f5;--accent-purple:#b8a0e8;
+    --accent-pink:#f0a8c8;--accent-gold:#f5c842;--accent-red:#f08080;--accent-green:#6dd4a0;
+    --accent-orange:#f5b870;
+    --weekly-gradient:linear-gradient(135deg,#4abde8,#b8a0e8);
+    --daily-gradient:linear-gradient(135deg,#6dd4a0,#4abde8);
+    --charge-gradient:linear-gradient(135deg,#f5c842,#f5b870);
+    --shadow-soft:0 2px 12px rgba(74,189,232,0.15);
+    --shadow-card:0 3px 16px rgba(74,189,232,0.1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Sans KR',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+  body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 10%,rgba(125,211,245,0.25) 0%,transparent 50%),radial-gradient(ellipse at 70% 90%,rgba(184,160,232,0.15) 0%,transparent 50%),radial-gradient(ellipse at 50% 50%,rgba(240,168,200,0.08) 0%,transparent 60%);pointer-events:none;z-index:0}
+  .app{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:16px;padding-bottom:40px}
+  .setup-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:20px}
+  .setup-screen h1{font-family:'Gaegu',cursive;font-size:2.2rem;font-weight:700;color:var(--accent-blue);text-shadow:0 2px 8px rgba(74,189,232,0.2)}
+  .setup-screen p{font-size:0.9rem;color:var(--text-secondary)}
+  .char-count-selector{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .char-count-btn{width:52px;height:52px;border-radius:14px;border:2px solid var(--border-light);background:var(--bg-card);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:var(--shadow-soft);display:flex;align-items:center;justify-content:center}
+  .char-count-btn:hover{transform:translateY(-2px);border-color:var(--accent-blue)}
+  .char-count-btn.selected{background:linear-gradient(135deg,#d0f0ff,#e8d8ff);border-color:var(--accent-blue);box-shadow:0 3px 16px rgba(74,189,232,0.25)}
+  .setup-confirm-btn{margin-top:10px;padding:12px 40px;border-radius:14px;border:2px solid var(--accent-blue);background:linear-gradient(135deg,#d0f0ff,#e8d8ff);color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;transition:all 0.2s;box-shadow:var(--shadow-soft)}
+  .setup-confirm-btn:hover{transform:translateY(-2px)}
+  .setup-confirm-btn:disabled{opacity:0.4;cursor:default;transform:none}
+  .header{text-align:center;padding:20px 0 8px;margin-bottom:14px}
+  .header h1{font-family:'Gaegu',cursive;font-size:2.4rem;font-weight:700;color:var(--accent-blue);margin-bottom:2px;text-shadow:0 2px 8px rgba(74,189,232,0.2)}
+  .header .subtitle{font-family:'Gaegu',cursive;font-size:0.95rem;color:var(--text-muted)}
+  .reset-info{display:flex;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .reset-badge{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:0.68rem;font-weight:500;background:var(--bg-card);border:1px solid var(--border-light);box-shadow:var(--shadow-soft);color:var(--text-secondary)}
+  .reset-badge .dot{width:7px;height:7px;border-radius:50%}
+  .reset-badge.weekly .dot{background:var(--accent-blue)}.reset-badge.daily .dot{background:var(--accent-green)}.reset-badge.charge .dot{background:var(--accent-gold)}.reset-badge.abyss .dot{background:var(--accent-purple)}
+  .tab-nav{display:flex;gap:4px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .tab-nav::-webkit-scrollbar{display:none}
+  .tab-btn{flex:1;min-width:0;padding:10px 4px;border:2px solid var(--border-light);border-radius:14px;background:var(--bg-card);color:var(--text-secondary);font-family:'Noto Sans KR',sans-serif;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.3s;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;box-shadow:var(--shadow-soft)}
+  .tab-btn:hover{background:var(--bg-card-hover);transform:translateY(-1px)}
+  .tab-btn.active{background:linear-gradient(135deg,#d0f0ff,#e8d8ff);border-color:var(--accent-blue);color:var(--text-primary);box-shadow:0 3px 16px rgba(74,189,232,0.25);font-weight:700}
+  .tab-btn .tab-progress{display:block;font-size:0.6rem;color:var(--text-muted);margin-top:2px}
+  .tab-btn.active .tab-progress{color:var(--accent-blue)}
+  .char-name-edit{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px}
+  .char-name-edit input{background:var(--bg-card);border:2px solid var(--border-light);border-radius:12px;color:var(--text-primary);font-family:'Noto Sans KR',sans-serif;font-size:1rem;font-weight:600;padding:7px 14px;text-align:center;width:180px;outline:none;transition:border-color 0.3s;box-shadow:var(--shadow-soft)}
+  .char-name-edit input:focus{border-color:var(--accent-blue)}
+  .char-name-edit .edit-icon{color:var(--text-muted);font-size:0.75rem}
+  .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:600px){.content-grid{grid-template-columns:1fr}}
+  .quest-card{background:var(--bg-card);border:2px solid var(--border-light);border-radius:16px;padding:14px;transition:all 0.3s;position:relative;overflow:hidden;box-shadow:var(--shadow-card);animation:popIn 0.35s ease forwards;opacity:0}
+  .quest-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:16px 16px 0 0}
+  .quest-card.weekly::before{background:var(--weekly-gradient)}.quest-card.daily::before{background:var(--daily-gradient)}.quest-card.charge::before{background:var(--charge-gradient)}
+  .quest-card.completed{opacity:0.55!important;border-color:var(--accent-green);background:linear-gradient(135deg,#f0fff5,#fff)}
+  .quest-card.completed .quest-title::after{content:' ✅'}
+  .quest-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .quest-title{font-size:0.88rem;font-weight:600}
+  .quest-type{font-size:0.58rem;font-weight:700;padding:2px 8px;border-radius:10px;flex-shrink:0}
+  .quest-type.weekly{background:rgba(74,189,232,0.15);color:#3a9ac0}.quest-type.daily{background:rgba(109,212,160,0.15);color:#3aaa70}.quest-type.charge{background:rgba(245,200,66,0.2);color:#c09a20}
+  .progress-section{margin-bottom:10px}
+  .progress-bar-bg{width:100%;height:10px;background:var(--bg-secondary);border-radius:5px;overflow:hidden;border:1px solid var(--border-light)}
+  .progress-bar-fill{height:100%;border-radius:5px;transition:width 0.5s ease}
+  .quest-card.weekly .progress-bar-fill{background:var(--weekly-gradient)}.quest-card.daily .progress-bar-fill{background:var(--daily-gradient)}.quest-card.charge .progress-bar-fill{background:var(--charge-gradient)}
+  .progress-text{display:flex;justify-content:space-between;margin-top:5px;font-size:0.72rem;color:var(--text-secondary)}
+  .progress-text .count{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:1rem;color:var(--text-primary)}
+  .counter-controls{display:flex;gap:6px;align-items:center;justify-content:center}
+  .counter-btn{width:42px;height:42px;border-radius:12px;border:2px solid var(--border-light);background:var(--bg-card);color:var(--text-primary);font-size:1.2rem;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-soft)}
+  .counter-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+  .counter-btn:active{transform:scale(0.93)}
+  .counter-btn.minus{background:linear-gradient(135deg,#d8f3ff,#e8f0ff);border-color:var(--accent-sky);color:#3a8ab8}
+  .counter-btn.plus{background:linear-gradient(135deg,#ffe8e8,#fff0f0);border-color:#f0a0a0;color:var(--accent-red)}
+  .counter-btn.zero{width:auto;padding:0 14px;font-size:0.7rem;background:linear-gradient(135deg,#e0ffe8,#f0fff5);border-color:#90d8a8;color:#3a9a60}
+  .charge-info{text-align:center;font-size:0.66rem;color:var(--text-muted);margin-top:5px}
+  .abyss-card{background:var(--bg-card);border:2px solid var(--border-light);border-radius:16px;padding:14px;box-shadow:var(--shadow-card);grid-column:1/-1;animation:popIn 0.35s ease forwards;opacity:0;animation-delay:0.3s;position:relative;overflow:hidden}
+  .abyss-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:16px 16px 0 0;background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink))}
+  .abyss-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  .abyss-title{font-size:0.88rem;font-weight:600}.abyss-type{font-size:0.58rem;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(184,160,232,0.15);color:#8a6cc8}
+  .abyss-reset-note{text-align:center;font-size:0.66rem;color:var(--text-muted);margin-top:6px}
+  .toggle-container{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:8px}
+  .toggle-switch{position:relative;width:52px;height:28px;cursor:pointer}
+  .toggle-switch input{display:none}
+  .toggle-slider{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--bg-secondary);border:2px solid var(--border);border-radius:14px;transition:all 0.3s}
+  .toggle-slider::after{content:'';position:absolute;width:20px;height:20px;left:3px;top:2px;background:white;border-radius:50%;transition:all 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.1)}
+  .toggle-switch input:checked+.toggle-slider{background:linear-gradient(135deg,var(--accent-purple),var(--accent-pink));border-color:var(--accent-purple)}
+  .toggle-switch input:checked+.toggle-slider::after{transform:translateX(24px)}
+  .toggle-status{font-size:0.78rem;font-weight:600;min-width:50px}
+  .toggle-status.on{color:var(--accent-purple)}.toggle-status.off{color:var(--text-muted)}
+  .reset-all-btn{display:block;margin:14px auto 0;padding:8px 22px;background:linear-gradient(135deg,#ffe8e8,#fff0f0);border:2px solid #f0b8b8;border-radius:12px;color:var(--accent-red);font-family:'Noto Sans KR',sans-serif;font-size:0.76rem;font-weight:500;cursor:pointer;transition:all 0.3s;box-shadow:var(--shadow-soft)}
+  .reset-all-btn:hover{transform:translateY(-1px)}
+  .settings-btn{position:fixed;bottom:16px;right:16px;width:44px;height:44px;border-radius:50%;background:var(--bg-card);border:2px solid var(--border-light);color:var(--text-secondary);font-size:1.2rem;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+  .settings-btn:hover{color:var(--accent-blue);transform:rotate(30deg)}
+  .settings-modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.3);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+  .settings-modal{background:var(--bg-card);border-radius:20px;padding:24px;max-width:360px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,0.15);animation:popIn 0.3s ease}
+  .settings-modal h2{font-family:'Gaegu',cursive;font-size:1.4rem;color:var(--accent-blue);margin-bottom:16px;text-align:center}
+  .settings-modal label{display:block;font-size:0.82rem;color:var(--text-secondary);margin-bottom:6px;font-weight:500}
+  .settings-char-count{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+  .settings-char-count button{width:42px;height:42px;border-radius:12px;border:2px solid var(--border-light);background:var(--bg-card);color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;cursor:pointer;transition:all 0.2s}
+  .settings-char-count button:hover{border-color:var(--accent-blue)}
+  .settings-char-count button.selected{background:linear-gradient(135deg,#d0f0ff,#e8d8ff);border-color:var(--accent-blue)}
+  .settings-actions{display:flex;gap:8px;justify-content:center}
+  .settings-actions button{padding:8px 24px;border-radius:12px;font-family:'Noto Sans KR',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;border:2px solid}
+  .btn-save{background:linear-gradient(135deg,#d0f0ff,#e8d8ff);border-color:var(--accent-blue);color:var(--text-primary)}
+  .btn-cancel{background:var(--bg-card);border-color:var(--border);color:var(--text-secondary)}
+  .settings-warning{font-size:0.7rem;color:var(--accent-red);text-align:center;margin-top:8px;margin-bottom:8px}
+  .overview-grid{display:grid;grid-template-columns:1fr;gap:10px}
+  .overview-card{background:var(--bg-card);border:2px solid var(--border-light);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow-card);animation:popIn 0.35s ease forwards;opacity:0}
+  .overview-card:nth-child(1){animation-delay:0s}.overview-card:nth-child(2){animation-delay:.05s}.overview-card:nth-child(3){animation-delay:.1s}.overview-card:nth-child(4){animation-delay:.15s}.overview-card:nth-child(5){animation-delay:.2s}.overview-card:nth-child(6){animation-delay:.25s}.overview-card:nth-child(7){animation-delay:.3s}.overview-card:nth-child(8){animation-delay:.35s}
+  .overview-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .overview-card-header h3{font-size:0.95rem;font-weight:700}
+  .overview-card-header .pct{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;color:var(--accent-blue)}
+  .overview-quests{display:grid;grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:6px}
+  .overview-quest-item{background:var(--bg-secondary);border-radius:10px;padding:8px 4px;text-align:center;border:1px solid var(--border-light)}
+  .overview-quest-item .oq-name{font-size:0.6rem;color:var(--text-muted);margin-bottom:2px}
+  .overview-quest-item .oq-count{font-family:'Rajdhani',sans-serif;font-size:0.9rem;font-weight:700}
+  .oq-count.done{color:var(--accent-green)}.oq-count.partial{color:var(--accent-orange)}.oq-count.none{color:var(--text-muted)}.oq-count.on{color:var(--accent-purple)}.oq-count.off{color:var(--text-muted)}
+  .overview-bar{margin-top:8px;height:5px;background:var(--bg-secondary);border-radius:3px;overflow:hidden;border:1px solid var(--border-light)}
+  .overview-bar-fill{height:100%;background:var(--weekly-gradient);border-radius:3px;transition:width 0.5s ease}
+  .footer-credit{text-align:center;margin-top:28px;padding:12px 0;font-size:0.65rem;color:var(--text-muted);letter-spacing:0.3px}
+  /* 광고 배너 영역 */
+  .ad-banner{max-width:900px;margin:14px auto;min-height:90px;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:2px dashed var(--border-light);border-radius:14px;color:var(--text-muted);font-size:0.7rem;box-shadow:var(--shadow-soft)}
+  .ad-banner.active{border:none;min-height:auto;background:transparent;box-shadow:none}
+  /* PWA 설치 배너 */
+  .install-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#d0f0ff,#e8d8ff);border-top:2px solid var(--accent-blue);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:150;box-shadow:0 -4px 16px rgba(74,189,232,0.15);animation:slideUp 0.4s ease}
+  .install-banner .install-text{font-size:0.78rem;font-weight:500;color:var(--text-primary)}
+  .install-banner .install-btn{padding:8px 18px;border-radius:12px;border:2px solid var(--accent-blue);background:white;color:var(--accent-blue);font-family:'Noto Sans KR',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;white-space:nowrap}
+  .install-banner .install-close{background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;padding:4px 8px}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  @keyframes popIn{from{opacity:0;transform:translateY(10px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .quest-card:nth-child(1){animation-delay:0s}.quest-card:nth-child(2){animation-delay:.05s}.quest-card:nth-child(3){animation-delay:.1s}.quest-card:nth-child(4){animation-delay:.15s}.quest-card:nth-child(5){animation-delay:.2s}.quest-card:nth-child(6){animation-delay:.25s}.quest-card:nth-child(7){animation-delay:.3s}
+  @media(max-width:480px){.app{padding:10px;padding-bottom:40px}.header h1{font-size:1.9rem}.quest-card{padding:12px}.tab-btn{padding:8px 3px;font-size:0.68rem}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useCallback}=React;
+
+const QUEST_DEFS=[
+  {id:'daily_dungeon',name:'일일던전',max:7,type:'weekly'},
+  {id:'awakening',name:'각성전',max:3,type:'weekly'},
+  {id:'subjugation',name:'토벌전',max:3,type:'weekly'},
+  {id:'nightmare',name:'악몽 던전',max:14,type:'charge',chargePerDay:2},
+  {id:'daily_mission',name:'일일 사명퀘스트',max:5,type:'daily'},
+  {id:'shugo',name:'슈고페스타',max:14,type:'charge',chargePerDay:2},
+];
+
+const STORAGE_KEY='aion2_tracker_v8';
+
+function getGameDay(){const a=new Date(Date.now()+4*3600000);return a.toISOString().split('T')[0]}
+function getLastWednesday(){const a=new Date(Date.now()+4*3600000);const d=a.getUTCDay();const diff=d>=3?d-3:d+4;const w=new Date(a);w.setUTCDate(a.getUTCDate()-diff);return w.toISOString().split('T')[0]}
+function getLastAbyssReset(){
+  const now=new Date(),kst=new Date(now.getTime()+9*3600000);
+  const kstDay=kst.getUTCDay(),kstHour=kst.getUTCHours();
+  const resetDays=[2,4,6];let best=Infinity;
+  for(const rd of resetDays){let o=kstDay-rd;if(o<0)o+=7;if(o===0&&kstHour<21)o=7;if(o<best)best=o}
+  const r=new Date(kst);r.setUTCDate(kst.getUTCDate()-best);r.setUTCHours(12,0,0,0);
+  return new Date(r.getTime()-9*3600000).toISOString();
+}
+function daysBetween(a,b){return Math.floor((new Date(b+'T00:00:00Z')-new Date(a+'T00:00:00Z'))/86400000)}
+function loadData(){try{const r=localStorage.getItem(STORAGE_KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function saveData(d){localStorage.setItem(STORAGE_KEY,JSON.stringify(d))}
+
+/*
+  핵심: remain = 남은 횟수를 직접 저장
+  시작 시 remain = max (풀 충전)
+  - 버튼 → remain 감소 (던전 클리어)
+  + 버튼 → remain 증가 (실수 복구)
+  완료 = remain이 0
+*/
+function createCharData(today){
+  const cd={abyss:false,abyssUpdated:new Date().toISOString()};
+  QUEST_DEFS.forEach(q=>{cd[q.id]={remain:q.max,lastUpdate:today}});
+  return cd;
+}
+
+function initData(charCount){
+  const saved=loadData();
+  const today=getGameDay();
+  const lastWed=getLastWednesday();
+  const lastAbyssReset=getLastAbyssReset();
+
+  if(saved&&saved.charCount){
+    let u={...saved,lastAccess:today};
+    for(let ci=0;ci<u.charCount;ci++){
+      const ck=`char_${ci}`;
+      if(!u[ck])u[ck]=createCharData(today);
+      if(u[ck].abyss===undefined){u[ck].abyss=false;u[ck].abyssUpdated=new Date().toISOString()}
+      if(u[ck].abyssUpdated&&new Date(u[ck].abyssUpdated)<new Date(lastAbyssReset)){u[ck].abyss=false;u[ck].abyssUpdated=lastAbyssReset}
+
+      QUEST_DEFS.forEach(q=>{
+        let qd=u[ck][q.id];
+        // 마이그레이션: 이전 버전 데이터 호환
+        if(!qd){qd={remain:q.max,lastUpdate:today};u[ck][q.id]=qd}
+        if(qd.remain===undefined){
+          // 이전 used/count 기반 → remain 변환
+          const used=qd.used||qd.count||0;
+          qd.remain=q.max-used;
+          delete qd.used;delete qd.count;
+        }
+
+        if(q.type==='weekly'){
+          if((saved.lastWednesday||lastWed)!==lastWed)qd.remain=q.max; // 리셋 → 풀 충전
+        }else if(q.type==='daily'){
+          if(qd.lastUpdate!==today){qd.remain=q.max;qd.lastUpdate=today}
+        }else if(q.type==='charge'){
+          if(qd.lastUpdate!==today){
+            const days=daysBetween(qd.lastUpdate,today);
+            // 충전: remain이 올라감 (최대 max까지)
+            qd.remain=Math.min(q.max,qd.remain+days*q.chargePerDay);
+            qd.lastUpdate=today;
+          }
+        }
+      });
+    }
+    u.lastWednesday=lastWed;
+    saveData(u);
+    return u;
+  }
+
+  if(!charCount)return null;
+  const names=[];for(let i=0;i<charCount;i++)names.push(`캐릭터${i+1}`);
+  const data={charCount,names,lastAccess:today,lastWednesday:lastWed};
+  for(let ci=0;ci<charCount;ci++)data[`char_${ci}`]=createCharData(today);
+  saveData(data);
+  return data;
+}
+
+function QuestCard({quest,charData,onUpdate}){
+  const qd=charData[quest.id]||{remain:quest.max};
+  const remain=qd.remain!==undefined?qd.remain:quest.max;
+  const max=quest.max;
+  const used=max-remain;
+  const pct=Math.min((used/max)*100,100); // 사용한 만큼 게이지 참
+  const isDone=remain<=0;
+  const typeLabel=quest.type==='weekly'?'주간':quest.type==='daily'?'일일':'충전';
+  const typeClass=quest.type==='charge'?'charge':quest.type;
+  let note=null;
+  if(quest.type==='charge')note=`하루 ${quest.chargePerDay}장 자동 충전`;
+  else if(quest.type==='daily')note='매일 AM 5:00 초기화';
+
+  return(
+    <div className={`quest-card ${typeClass} ${isDone?'completed':''}`}>
+      <div className="quest-header">
+        <span className="quest-title">{quest.name}</span>
+        <span className={`quest-type ${typeClass}`}>{typeLabel}</span>
+      </div>
+      <div className="progress-section">
+        <div className="progress-bar-bg"><div className="progress-bar-fill" style={{width:`${pct}%`}}/></div>
+        <div className="progress-text">
+          <span>남은 횟수: {remain}</span>
+          <span className="count">{remain} / {max}</span>
+        </div>
+      </div>
+      <div className="counter-controls">
+        <button className="counter-btn minus" onClick={()=>remain>0&&onUpdate(quest.id,remain-1)}>−</button>
+        <button className="counter-btn plus" onClick={()=>remain<max&&onUpdate(quest.id,remain+1)}>+</button>
+        <button className="counter-btn zero" onClick={()=>onUpdate(quest.id,0)}>완료</button>
+      </div>
+      {note&&<div className="charge-info">{note}</div>}
+    </div>
+  );
+}
+
+function AbyssCard({checked,onChange}){
+  return(
+    <div className="abyss-card">
+      <div className="abyss-header"><span className="abyss-title">어비스 회랑</span><span className="abyss-type">수동 체크</span></div>
+      <div className="toggle-container">
+        <span className={`toggle-status ${checked?'on':'off'}`}>{checked?'완료 ✨':'미완료'}</span>
+        <label className="toggle-switch"><input type="checkbox" checked={checked} onChange={e=>onChange(e.target.checked)}/><span className="toggle-slider"/></label>
+      </div>
+      <div className="abyss-reset-note">매주 화 · 목 · 토 PM 9:00 초기화</div>
+    </div>
+  );
+}
+
+function OverviewView({data}){
+  return(
+    <div className="overview-grid">
+      {Array.from({length:data.charCount},(_,ci)=>{
+        const cd=data[`char_${ci}`]||{};
+        let totalMax=0,totalRemain=0;
+        QUEST_DEFS.forEach(q=>{
+          totalMax+=q.max;
+          const r=cd[q.id]?.remain;
+          totalRemain+=(r!==undefined?r:q.max);
+        });
+        const totalUsed=totalMax-totalRemain;
+        const pct=totalMax>0?Math.round((totalUsed/totalMax)*100):0;
+        return(
+          <div key={ci} className="overview-card" style={{animationDelay:`${ci*0.05}s`}}>
+            <div className="overview-card-header"><h3>⭐ {data.names[ci]}</h3><span className="pct">{pct}%</span></div>
+            <div className="overview-quests">
+              {QUEST_DEFS.map(q=>{
+                const r=cd[q.id]?.remain;const rem=r!==undefined?r:q.max;
+                const cls=rem<=0?'done':rem<q.max?'partial':'none';
+                return(<div key={q.id} className="overview-quest-item"><div className="oq-name">{q.name}</div><div className={`oq-count ${cls}`}>{rem}/{q.max}</div></div>);
+              })}
+              <div className="overview-quest-item"><div className="oq-name">어비스 회랑</div><div className={`oq-count ${cd.abyss?'on':'off'}`}>{cd.abyss?'ON ✨':'OFF'}</div></div>
+            </div>
+            <div className="overview-bar"><div className="overview-bar-fill" style={{width:`${pct}%`}}/></div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function SetupScreen({onConfirm}){
+  const[count,setCount]=useState(null);
+  return(
+    <div className="setup-screen">
+      <h1>🌸 AION2 체크리스트 🌸</h1>
+      <p>캐릭터 수를 선택해주세요 (최대 8개)</p>
+      <div className="char-count-selector">{[1,2,3,4,5,6,7,8].map(n=>(<button key={n} className={`char-count-btn ${count===n?'selected':''}`} onClick={()=>setCount(n)}>{n}</button>))}</div>
+      <button className="setup-confirm-btn" disabled={!count} onClick={()=>onConfirm(count)}>{count?`${count}캐릭터로 시작하기 🚀`:'캐릭터 수를 선택하세요'}</button>
+    </div>
+  );
+}
+
+function SettingsModal({currentCount,onSave,onClose}){
+  const[count,setCount]=useState(currentCount);
+  return(
+    <div className="settings-modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="settings-modal">
+        <h2>⚙️ 설정</h2>
+        <label>캐릭터 수 변경</label>
+        <div className="settings-char-count">{[1,2,3,4,5,6,7,8].map(n=>(<button key={n} className={count===n?'selected':''} onClick={()=>setCount(n)}>{n}</button>))}</div>
+        {count<currentCount&&<div className="settings-warning">⚠️ 캐릭터를 줄이면 뒤쪽 캐릭터 데이터가 삭제됩니다</div>}
+        <div className="settings-actions"><button className="btn-cancel" onClick={onClose}>취소</button><button className="btn-save" onClick={()=>onSave(count)}>저장</button></div>
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const[data,setData]=useState(()=>initData());
+  const[activeTab,setActiveTab]=useState('overview');
+  const[showSettings,setShowSettings]=useState(false);
+  const update=useCallback(nd=>{setData(nd);saveData(nd)},[]);
+
+  if(!data)return(<div className="app"><SetupScreen onConfirm={c=>{setData(initData(c))}}/><div className="footer-credit">Made by. 비치/조아/위니/바닐라 — 브리트라 서버</div></div>);
+
+  const charCount=data.charCount;
+  const handleQuest=(ci,qid,newRemain)=>{const nd={...data};const ck=`char_${ci}`;nd[ck]={...nd[ck]};nd[ck][qid]={remain:newRemain,lastUpdate:getGameDay()};update(nd)};
+  const handleAbyss=(ci,val)=>{const nd={...data};nd[`char_${ci}`]={...nd[`char_${ci}`],abyss:val,abyssUpdated:new Date().toISOString()};update(nd)};
+  const handleName=(i,n)=>{const nd={...data,names:[...data.names]};nd.names[i]=n;update(nd)};
+  const handleReset=ci=>{if(!confirm(`${data.names[ci]}의 모든 진행도를 초기화할까요?`))return;const nd={...data};nd[`char_${ci}`]=createCharData(getGameDay());update(nd)};
+  const handleCountChange=nc=>{const nd={...data,charCount:nc};const names=[...data.names];for(let i=data.charCount;i<nc;i++){names.push(`캐릭터${i+1}`);nd[`char_${i}`]=createCharData(getGameDay())}for(let i=nc;i<data.charCount;i++)delete nd[`char_${i}`];nd.names=names.slice(0,nc);if(activeTab!=='overview'&&parseInt(activeTab)>=nc)setActiveTab('overview');update(nd);setShowSettings(false)};
+
+  const ci=activeTab==='overview'?-1:parseInt(activeTab);
+
+  return(
+    <div className="app">
+      <div className="header">
+        <h1>🌸 AION2 체크리스트 🌸</h1>
+        <div className="subtitle">매일매일 꼼꼼하게 체크하자!</div>
+        <div className="reset-info">
+          <span className="reset-badge weekly"><span className="dot"/>주간: 수 AM 5:00</span>
+          <span className="reset-badge daily"><span className="dot"/>일일: 매일 AM 5:00</span>
+          <span className="reset-badge charge"><span className="dot"/>충전: 하루 2장</span>
+          <span className="reset-badge abyss"><span className="dot"/>어비스: 화·목·토 PM 9</span>
+        </div>
+      </div>
+      <div className="tab-nav">
+        <button className={`tab-btn ${activeTab==='overview'?'active':''}`} onClick={()=>setActiveTab('overview')}>📋 전체</button>
+        {Array.from({length:charCount},(_,i)=>{
+          const cd=data[`char_${i}`]||{};
+          let totalRemain=0,totalMax=0;
+          QUEST_DEFS.forEach(q=>{totalMax+=q.max;const r=cd[q.id]?.remain;totalRemain+=(r!==undefined?r:q.max)});
+          return(<button key={i} className={`tab-btn ${activeTab===String(i)?'active':''}`} onClick={()=>setActiveTab(String(i))}>{data.names[i]}<span className="tab-progress">{totalRemain}/{totalMax}</span></button>);
+        })}
+      </div>
+      {activeTab==='overview'?<OverviewView data={data}/>:(
+        <>
+          <div className="char-name-edit"><input value={data.names[ci]} onChange={e=>handleName(ci,e.target.value)} placeholder="캐릭터 이름"/><span className="edit-icon">✏️ 이름 편집</span></div>
+          <div className="content-grid">
+            {QUEST_DEFS.map(q=>(<QuestCard key={q.id} quest={q} charData={data[`char_${ci}`]||{}} onUpdate={(qid,rem)=>handleQuest(ci,qid,rem)}/>))}
+            <AbyssCard checked={(data[`char_${ci}`]||{}).abyss||false} onChange={val=>handleAbyss(ci,val)}/>
+          </div>
+          <button className="reset-all-btn" onClick={()=>handleReset(ci)}>🔄 {data.names[ci]} 초기화</button>
+        </>
+      )}
+      <div className="footer-credit">Made by. 비치/조아/위니/바닐라 — 브리트라 서버</div>
+      {/* 하단 광고 배너 */}
+      <AdBanner/>
+      <button className="settings-btn" onClick={()=>setShowSettings(true)}>⚙️</button>
+      {showSettings&&<SettingsModal currentCount={charCount} onSave={handleCountChange} onClose={()=>setShowSettings(false)}/>}
+      <InstallBanner/>
+    </div>
+  );
+}
+
+/* 광고 배너 컴포넌트 - 애드센스 승인 후 활성화 */
+function AdBanner(){
+  const adRef=React.useRef(null);
+  const[adActive,setAdActive]=useState(false);
+  React.useEffect(()=>{
+    try{
+      if(window.adsbygoogle&&adRef.current){
+        (window.adsbygoogle=window.adsbygoogle||[]).push({});
+        setAdActive(true);
+      }
+    }catch(e){}
+  },[]);
+  return(
+    <div className={`ad-banner ${adActive?'active':''}`}>
+      {!adActive&&'📢 광고 영역 (애드센스 승인 후 표시됩니다)'}
+      {/* 애드센스 승인 후 아래 주석을 해제하고 data-ad-client, data-ad-slot을 본인 값으로 교체하세요 */}
+      {/* <ins className="adsbygoogle" style={{display:'block'}} data-ad-client="ca-pub-YOUR_PUB_ID" data-ad-slot="YOUR_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins> */}
+    </div>
+  );
+}
+
+/* PWA 설치 배너 */
+function InstallBanner(){
+  const[deferredPrompt,setDeferredPrompt]=useState(null);
+  const[show,setShow]=useState(false);
+  const[dismissed,setDismissed]=useState(false);
+  React.useEffect(()=>{
+    if(localStorage.getItem('aion2_install_dismissed'))return;
+    const handler=e=>{e.preventDefault();setDeferredPrompt(e);setShow(true)};
+    window.addEventListener('beforeinstallprompt',handler);
+    return()=>window.removeEventListener('beforeinstallprompt',handler);
+  },[]);
+  const handleInstall=async()=>{
+    if(!deferredPrompt)return;
+    deferredPrompt.prompt();
+    const{outcome}=await deferredPrompt.userChoice;
+    if(outcome==='accepted')setShow(false);
+    setDeferredPrompt(null);
+  };
+  const handleClose=()=>{setShow(false);setDismissed(true);localStorage.setItem('aion2_install_dismissed','1')};
+  if(!show||dismissed)return null;
+  return(
+    <div className="install-banner">
+      <span className="install-text">🌸 홈 화면에 추가하면 앱처럼 쓸 수 있어요!</span>
+      <button className="install-btn" onClick={handleInstall}>설치</button>
+      <button className="install-close" onClick={handleClose}>✕</button>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+/* 서비스워커 등록 */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
