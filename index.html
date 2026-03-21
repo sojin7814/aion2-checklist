@@ -3,7 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>AION2 체크리스트</title>
+<title>AION2 체크리스트 - 아이온2 일일/주간 퀘스트 관리 도구</title>
+<meta name="description" content="아이온2(AION2) 일일·주간 퀘스트 체크리스트. 캐릭터별 일일던전, 각성전, 토벌전, 악몽 던전, 슈고페스타, 어비스 회랑, 성역 진행도를 한눈에 관리하세요. 자동 초기화, 충전 시스템 지원. 모바일 앱처럼 사용 가능.">
+<meta name="keywords" content="아이온2, AION2, 체크리스트, 일일퀘스트, 주간퀘스트, 일일던전, 각성전, 토벌전, 악몽던전, 슈고페스타, 어비스회랑, 성역, 루드라, 침식, 게임도구, 숙제관리">
+<meta name="author" content="비치/조아/위니/바닐라 — 브리트라 서버">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aion2check.com/">
+<!-- Open Graph (카카오톡/SNS 공유용) -->
+<meta property="og:title" content="AION2 체크리스트 - 아이온2 퀘스트 관리 도구">
+<meta property="og:description" content="아이온2 캐릭터별 일일·주간 퀘스트 진행도를 한눈에! 자동 초기화, 충전 시스템, 어비스·성역 체크까지. 모바일 앱처럼 사용하세요.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://aion2check.com/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="AION2 체크리스트">
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#4abde8">
@@ -156,6 +168,37 @@
 </head>
 <body>
 <div id="root"></div>
+<noscript>
+  <div style="max-width:800px;margin:0 auto;padding:20px;font-family:sans-serif;color:#2a5a7a">
+    <h1>🌸 AION2 체크리스트 — 아이온2 퀘스트 관리 도구</h1>
+    <p>아이온2(AION2) 플레이어를 위한 무료 일일/주간 퀘스트 체크리스트입니다. 최대 8캐릭터까지 등록하고, 각 캐릭터별 퀘스트 진행도를 한눈에 관리하세요.</p>
+    <h2>지원 항목</h2>
+    <ul>
+      <li><strong>일일 사명퀘스트</strong> — 매일 5회, AM 5:00 자동 초기화</li>
+      <li><strong>슈고페스타</strong> — 충전형, 하루 2장 자동 충전 (최대 14장)</li>
+      <li><strong>악몽 던전</strong> — 충전형, 하루 2장 자동 충전 (최대 14장)</li>
+      <li><strong>어비스 회랑</strong> — 수동 체크, 매주 화·목·토 PM 9:00 초기화</li>
+      <li><strong>성역-루드라</strong> — 주간 4회, 수요일 AM 5:00 초기화</li>
+      <li><strong>성역-침식</strong> — 주간 4회, 수요일 AM 5:00 초기화</li>
+      <li><strong>각성전</strong> — 주간 3회, 수요일 AM 5:00 초기화</li>
+      <li><strong>토벌전</strong> — 주간 3회, 수요일 AM 5:00 초기화</li>
+      <li><strong>일일던전</strong> — 주간 7회, 수요일 AM 5:00 초기화</li>
+    </ul>
+    <h2>주요 기능</h2>
+    <ul>
+      <li>캐릭터별 퀘스트 진행도 추적 (최대 8캐릭터)</li>
+      <li>일일/주간/충전 퀘스트 자동 초기화 시스템</li>
+      <li>전체 캐릭터 진행 현황 한눈에 보기 (오버뷰)</li>
+      <li>캐릭터별 메모 기능 (장비 목표, 강화 현황 등)</li>
+      <li>모바일 홈 화면 추가로 앱처럼 사용 가능 (PWA)</li>
+      <li>데이터는 기기에만 저장 — 서버 전송 없음, 개인정보 안전</li>
+    </ul>
+    <h2>사용법</h2>
+    <p>1. 캐릭터 수를 선택하세요 (1~8개). 2. 각 캐릭터 탭에서 퀘스트를 클리어할 때마다 − 버튼을 눌러 남은 횟수를 줄이세요. 3. 완료 버튼으로 한번에 0으로 만들 수 있습니다. 4. 전체 탭에서 모든 캐릭터의 진행 상황을 한눈에 확인하세요.</p>
+    <p>이 도구는 브리트라 서버 유저 비치/조아/위니/바닐라가 만들었습니다. 아이온2를 즐기는 모든 분들이 매일 숙제를 빠짐없이 관리할 수 있도록 도와드립니다.</p>
+    <p><a href="./privacy.html">개인정보처리방침</a></p>
+  </div>
+</noscript>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
