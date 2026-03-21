@@ -11,8 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="AION2">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<!-- 애드센스: 승인 후 YOUR_PUB_ID를 본인 ca-pub-xxxxxxx로 교체하세요 -->
-<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUB_ID" crossorigin="anonymous"></script> -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4764115622535026" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -421,9 +420,7 @@ function AdBanner(){
   },[]);
   return(
     <div className={`ad-banner ${adActive?'active':''}`}>
-      {!adActive&&'📢 광고 영역 (애드센스 승인 후 표시됩니다)'}
-      {/* 애드센스 승인 후 아래 주석을 해제하고 data-ad-client, data-ad-slot을 본인 값으로 교체하세요 */}
-      {/* <ins className="adsbygoogle" style={{display:'block'}} data-ad-client="ca-pub-YOUR_PUB_ID" data-ad-slot="YOUR_AD_SLOT" data-ad-format="auto" data-full-width-responsive="true"></ins> */}
+      {/* 자동 광고가 활성화되면 구글이 알아서 최적의 위치에 광고를 배치합니다 */}
     </div>
   );
 }
