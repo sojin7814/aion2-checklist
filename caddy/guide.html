@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사용법 안내 - 캐디 수입장부</title>
+<meta name="description" content="캐디 수입장부 사용법 안내. 수입 기록, 월간·연간 통계, CSV 다운로드, 홈화면 설치까지 상세 가이드.">
+<meta name="keywords" content="캐디, 수입장부, 사용법, 골프, 캐디피, 수입 기록, 통계, CSV 다운로드">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://aion2check.com/caddy/guide.html">
+<meta property="og:title" content="사용법 안내 - 캐디 수입장부">
+<meta property="og:description" content="캐디 수입장부 사용법을 알려드립니다. 수입 기록부터 통계 확인까지 한눈에!">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://aion2check.com/caddy/guide.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛳</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans KR',sans-serif;background:#fffbfc;color:#1f2937;min-height:100vh;line-height:1.75;}
+a{color:#ec4899;text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+.wrap{max-width:640px;margin:0 auto;padding:24px 20px 60px;}
+
+/* 헤더 */
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;}
+.back-link{font-size:14px;color:#9ca3af;display:flex;align-items:center;gap:6px;}
+.back-link:hover{color:#ec4899;}
+
+.hero{text-align:center;margin-bottom:40px;padding:32px 20px;background:linear-gradient(135deg,#fff0f3,#fffbfc);border-radius:20px;border:1px solid #fde2e8;}
+.hero-icon{font-size:48px;margin-bottom:12px;}
+.hero h1{font-size:24px;font-weight:800;background:linear-gradient(135deg,#f472b6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.hero p{font-size:14px;color:#9ca3af;}
+
+/* 목차 */
+.toc{background:#fff5f7;border-radius:16px;padding:20px 24px;margin-bottom:36px;border:1px solid #fde2e8;}
+.toc h2{font-size:15px;font-weight:700;color:#ec4899;margin-bottom:12px;}
+.toc ol{padding-left:20px;}
+.toc li{margin-bottom:6px;font-size:14px;}
+.toc a{color:#f472b6;}
+
+/* 섹션 */
+.section{margin-bottom:36px;}
+.section-num{display:inline-block;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+.section h2{font-size:20px;font-weight:800;color:#1f2937;margin-bottom:14px;}
+.section h3{font-size:16px;font-weight:700;color:#ec4899;margin:18px 0 8px;}
+.section p{font-size:14px;color:#6b7280;margin-bottom:10px;}
+
+/* 스텝 카드 */
+.step{background:#fff5f7;border-radius:14px;padding:16px 18px;margin-bottom:12px;border-left:3px solid #ec4899;}
+.step-title{font-size:14px;font-weight:700;color:#ec4899;margin-bottom:4px;}
+.step-desc{font-size:13px;color:#6b7280;}
+
+/* 팁 박스 */
+.tip{background:rgba(236,72,153,0.05);border:1px solid rgba(236,72,153,0.15);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:13px;color:#ec4899;}
+.tip::before{content:'💡 ';font-size:14px;}
+
+/* 테이블 */
+.info-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.info-table th{background:#fff0f3;color:#ec4899;padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid #fde2e8;}
+.info-table td{padding:10px 14px;border-bottom:1px solid #fde2e8;}
+.info-table tr:last-child td{border-bottom:none;}
+
+/* 설치 가이드 */
+.install-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+.install-card{background:#fff5f7;border-radius:14px;padding:16px;text-align:center;border:1px solid #fde2e8;}
+.install-card .ic-icon{font-size:28px;margin-bottom:8px;}
+.install-card .ic-title{font-size:13px;font-weight:700;color:#1f2937;margin-bottom:6px;}
+.install-card .ic-desc{font-size:11px;color:#9ca3af;line-height:1.6;}
+
+/* 입력 필드 예시 */
+.field-list{margin:12px 0;}
+.field-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff5f7;border-radius:10px;margin-bottom:8px;font-size:13px;}
+.field-emoji{font-size:18px;}
+.field-name{font-weight:600;color:#1f2937;min-width:80px;}
+.field-desc{color:#9ca3af;}
+
+/* 푸터 */
+.footer{text-align:center;padding:32px 0 0;border-top:1px solid #fde2e8;margin-top:40px;font-size:13px;color:#9ca3af;}
+.footer a{color:#ec4899;}
+
+@media(max-width:480px){
+  .wrap{padding:16px 14px 40px;}
+  .hero h1{font-size:20px;}
+  .section h2{font-size:18px;}
+  .install-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="top-bar">
+  <a href="/caddy/" class="back-link">← 장부로 돌아가기</a>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">⛳</div>
+  <h1>캐디 수입장부 사용법</h1>
+  <p>라운딩 수입을 간편하게 기록하고 통계를 확인하세요</p>
+</div>
+
+<nav class="toc">
+  <h2>📋 목차</h2>
+  <ol>
+    <li><a href="#record">수입 기록하기</a></li>
+    <li><a href="#list">내역 확인·수정·삭제</a></li>
+    <li><a href="#stats">월간·연간 통계 보기</a></li>
+    <li><a href="#csv">CSV 다운로드</a></li>
+    <li><a href="#install">홈화면에 설치하기</a></li>
+    <li><a href="#faq">자주 묻는 질문</a></li>
+  </ol>
+</nav>
+
+<!-- 1. 수입 기록 -->
+<section class="section" id="record">
+  <span class="section-num">STEP 1</span>
+  <h2>수입 기록하기</h2>
+  <p>하단의 <strong>「수입 기록하기 ✏️」</strong> 버튼을 눌러 당일 라운딩 수입을 기록할 수 있습니다.</p>
+
+  <h3>입력 항목</h3>
+  <div class="field-list">
+    <div class="field-item">
+      <span class="field-emoji">📅</span>
+      <span class="field-name">날짜</span>
+      <span class="field-desc">라운딩 날짜 선택 (기본값: 오늘)</span>
+    </div>
+    <div class="field-item">
+      <span class="field-emoji">⛳</span>
+      <span class="field-name">근무 홀수</span>
+      <span class="field-desc">라운딩한 홀 수 입력</span>
+    </div>
+    <div class="field-item">
+      <span class="field-emoji">💗</span>
+      <span class="field-name">캐디피</span>
+      <span class="field-desc">기본 캐디피 금액 (원)</span>
+    </div>
+    <div class="field-item">
+      <span class="field-emoji">🧡</span>
+      <span class="field-name">팁</span>
+      <span class="field-desc">팁 금액 (선택 입력)</span>
+    </div>
+    <div class="field-item">
+      <span class="field-emoji">📝</span>
+      <span class="field-name">메모</span>
+      <span class="field-desc">특이사항 메모 (선택 입력)</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">기록 저장하기</div>
+    <div class="step-desc">모든 항목을 입력한 뒤 저장 버튼을 누르면 기록이 저장됩니다. 캐디피와 팁은 자동으로 합산되어 총 수입으로 표시됩니다.</div>
+  </div>
+
+  <div class="tip">팁과 메모는 선택 항목이에요. 날짜, 홀수, 캐디피만 입력해도 저장됩니다.</div>
+</section>
+
+<!-- 2. 내역 관리 -->
+<section class="section" id="list">
+  <span class="section-num">STEP 2</span>
+  <h2>내역 확인·수정·삭제</h2>
+  <p>저장된 수입 내역은 홈 화면에서 날짜별로 확인할 수 있습니다.</p>
+
+  <div class="step">
+    <div class="step-title">내역 확인</div>
+    <div class="step-desc">홈 화면에서 해당 월의 기록 목록이 최신순으로 표시됩니다. 각 카드에 날짜, 캐디피, 팁, 합계가 표시됩니다.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">수정하기 ✏️</div>
+    <div class="step-desc">내역 카드를 터치하면 상세 정보가 펼쳐집니다. <strong>「수정하기」</strong> 버튼을 눌러 금액이나 메모를 수정할 수 있습니다.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">삭제하기</div>
+    <div class="step-desc"><strong>「삭제」</strong> 버튼을 누르면 확인 팝업이 뜹니다. 확인을 누르면 해당 기록이 영구 삭제됩니다.</div>
+  </div>
+
+  <div class="tip">삭제한 기록은 복구할 수 없으니 신중하게 삭제해주세요.</div>
+</section>
+
+<!-- 3. 통계 -->
+<section class="section" id="stats">
+  <span class="section-num">STEP 3</span>
+  <h2>월간·연간 통계 보기</h2>
+  <p>캐디 수입을 월별, 연도별로 한눈에 파악할 수 있습니다.</p>
+
+  <h3>📊 월간 통계</h3>
+  <p>상단의 월 선택 화살표(◀ ▶)로 원하는 달을 선택하면 해당 월의 통계가 자동으로 계산됩니다.</p>
+
+  <table class="info-table">
+    <tr>
+      <th>항목</th>
+      <th>설명</th>
+    </tr>
+    <tr>
+      <td>총 수입</td>
+      <td>해당 월의 캐디피 + 팁 합계</td>
+    </tr>
+    <tr>
+      <td>캐디피 / 팁</td>
+      <td>캐디피와 팁을 각각 분리해서 확인</td>
+    </tr>
+    <tr>
+      <td>근무 일수</td>
+      <td>해당 월 라운딩 횟수</td>
+    </tr>
+    <tr>
+      <td>총 홀수</td>
+      <td>해당 월 전체 홀 수 합계</td>
+    </tr>
+    <tr>
+      <td>일 평균 수입</td>
+      <td>총 수입 ÷ 근무 일수</td>
+    </tr>
+  </table>
+
+  <h3>📈 연간 통계</h3>
+  <p>하단 네비게이션의 <strong>「연간 통계」</strong> 탭을 누르면 해당 연도의 월별 수입 추이와 연간 합계를 확인할 수 있습니다.</p>
+
+  <div class="tip">통계는 기록을 저장할 때마다 자동으로 업데이트됩니다. 별도 조작이 필요 없어요!</div>
+</section>
+
+<!-- 4. CSV -->
+<section class="section" id="csv">
+  <span class="section-num">STEP 4</span>
+  <h2>CSV 다운로드</h2>
+  <p>기록한 수입 내역을 CSV 파일로 다운로드하여 엑셀이나 구글 시트에서 활용할 수 있습니다.</p>
+
+  <div class="step">
+    <div class="step-title">다운로드 방법</div>
+    <div class="step-desc">통계 화면 또는 설정에서 <strong>「CSV 다운로드」</strong> 버튼을 누르면 전체 기록이 CSV 파일로 저장됩니다.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">CSV 파일 내용</div>
+    <div class="step-desc">날짜, 근무 홀수, 캐디피, 합계가 포함됩니다. 엑셀에서 열어 추가 분석이나 세금 신고 자료로 활용할 수 있어요.</div>
+  </div>
+
+  <div class="tip">CSV 파일명은 「캐디수입_YYYY.csv」 형식으로 자동 생성됩니다.</div>
+</section>
+
+<!-- 5. 홈화면 설치 -->
+<section class="section" id="install">
+  <span class="section-num">STEP 5</span>
+  <h2>홈화면에 설치하기</h2>
+  <p>앱스토어 설치 없이 홈화면에 추가하면 앱처럼 바로 실행할 수 있습니다.</p>
+
+  <div class="install-grid">
+    <div class="install-card">
+      <div class="ic-icon">🤖</div>
+      <div class="ic-title">안드로이드 (Chrome)</div>
+      <div class="ic-desc">
+        ① 크롬에서 사이트 접속<br>
+        ② 우측 상단 ⋮ 메뉴<br>
+        ③ 「홈 화면에 추가」 터치<br>
+        ④ 추가 확인
+      </div>
+    </div>
+    <div class="install-card">
+      <div class="ic-icon">🍎</div>
+      <div class="ic-title">아이폰 (Safari)</div>
+      <div class="ic-desc">
+        ① 사파리에서 사이트 접속<br>
+        ② 하단 공유 버튼 (□↑) 터치<br>
+        ③ 「홈 화면에 추가」 선택<br>
+        ④ 추가 확인
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">홈화면에서 실행하면 주소창 없이 앱처럼 깔끔하게 사용할 수 있어요.</div>
+</section>
+
+<!-- 6. FAQ -->
+<section class="section" id="faq">
+  <span class="section-num">FAQ</span>
+  <h2>자주 묻는 질문</h2>
+
+  <div class="step">
+    <div class="step-title">Q. 데이터가 날아갔어요!</div>
+    <div class="step-desc">데이터는 브라우저에 저장됩니다. 브라우저 캐시/데이터를 삭제하면 초기화될 수 있어요. 시크릿(비공개) 모드에서는 저장이 안 됩니다.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">Q. 다른 폰에서도 볼 수 있나요?</div>
+    <div class="step-desc">현재는 기기별 로컬 저장 방식이라, 기기마다 따로 기록해야 합니다. 중요한 데이터는 CSV로 백업해두세요.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">Q. 다른 사람이 내 기록을 볼 수 있나요?</div>
+    <div class="step-desc">아니요! 데이터는 내 기기 브라우저에만 저장되고, 서버로 전송되지 않습니다. 같은 링크로 접속해도 각자 기기에 별도로 저장됩니다.</div>
+  </div>
+
+  <div class="step">
+    <div class="step-title">Q. PC에서도 사용 가능한가요?</div>
+    <div class="step-desc">네, PC 브라우저에서도 동일하게 사용할 수 있습니다. 다만 모바일에 최적화된 디자인이에요.</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>⛳ 캐디 수입장부</p>
+  <p style="margin-top:8px;"><a href="/caddy/">← 장부로 돌아가기</a> · <a href="/">아이온2 체크리스트</a> · <a href="/privacy.html">개인정보처리방침</a></p>
+</footer>
+
+</div>
+</body>
+</html>
