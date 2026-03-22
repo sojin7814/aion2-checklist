@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#fff0f3">
+<title>캐디 수입장부</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛳</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Noto Sans KR','Apple SD Gothic Neo',-apple-system,sans-serif;background:#fffbfc;min-height:100vh;color:#1f2937;overflow-x:hidden;}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+button{font-family:inherit;}
+.app{max-width:480px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:100px;}
+.header{padding:18px 20px 14px;background:linear-gradient(135deg,#fff0f3 0%,#fffbfc 100%);border-bottom:1px solid #fde2e8;position:sticky;top:0;z-index:10;}
+.header-inner{display:flex;align-items:center;gap:10px;}
+.header-icon{font-size:30px;}
+.header-title{margin:0;font-size:20px;font-weight:800;background:linear-gradient(135deg,#f472b6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.header-sub{margin:0;font-size:10px;color:#9ca3af;letter-spacing:1.5px;font-weight:500;}
+.content{padding:16px 16px 0;position:relative;z-index:1;}
+.month-sel{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px;}
+.arrow-btn{background:#fce7f3;border:1px solid #fde2e8;border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#ec4899;font-size:13px;cursor:pointer;font-weight:700;}
+.month-label{font-size:18px;font-weight:800;color:#1f2937;}
+.total-card{background:linear-gradient(135deg,#f472b6,#ec4899);border-radius:22px;padding:22px 20px;margin-bottom:14px;box-shadow:0 6px 24px rgba(244,114,182,0.2);color:#fff;position:relative;overflow:hidden;}
+.total-card-bg{position:absolute;top:-30px;right:-30px;font-size:80px;opacity:0.1;}
+.total-label{margin:0 0 2px;font-size:13px;opacity:0.85;font-weight:500;}
+.total-amount{margin:0 0 14px;font-size:34px;font-weight:900;letter-spacing:-1px;}
+.total-split{display:flex;gap:10px;}
+.total-split-item{flex:1;background:rgba(255,255,255,0.2);border-radius:14px;padding:10px 12px;}
+.total-split-label{margin:0;font-size:11px;opacity:0.9;}
+.total-split-val{margin:3px 0 0;font-size:17px;font-weight:800;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px;}
+.stat-card{background:#fff5f7;border:1px solid #fde2e8;border-radius:16px;padding:12px 10px;text-align:center;}
+.stat-emoji{font-size:18px;}
+.stat-label{margin:4px 0 2px;font-size:10px;color:#9ca3af;}
+.stat-val{margin:0;font-size:14px;font-weight:800;color:#1f2937;}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.section-title{margin:0;font-size:14px;font-weight:700;color:#6b7280;}
+.view-all-btn{background:none;border:none;color:#ec4899;font-size:13px;cursor:pointer;font-weight:600;}
+.empty{text-align:center;padding:36px 20px;color:#9ca3af;}
+.empty-icon{font-size:44px;margin:0 0 8px;}
+.empty-title{margin:0 0 4px;font-size:15px;font-weight:600;}
+.empty-sub{margin:0 0 14px;font-size:13px;}
+.pink-btn{background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:12px;padding:10px 28px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 3px 12px rgba(244,114,182,0.25);}
+.record-row{background:#fff5f7;border:1px solid #fde2e8;border-radius:16px;padding:12px 14px;margin-bottom:8px;}
+.record-inner{display:flex;justify-content:space-between;align-items:flex-start;}
+.record-tags{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.record-date{font-size:14px;font-weight:700;}
+.record-tag{font-size:10px;color:#9ca3af;background:#fce7f3;padding:2px 6px;border-radius:6px;font-weight:600;}
+.record-tag-pink{font-size:10px;color:#ec4899;background:#fce7f3;padding:2px 6px;border-radius:6px;font-weight:600;}
+.record-memo{font-size:11px;color:#9ca3af;}
+.record-details{display:flex;gap:10px;margin-top:5px;}
+.record-fee{font-size:12px;color:#f472b6;}
+.record-tip{font-size:12px;color:#f59e0b;}
+.record-total{margin:0;font-size:16px;font-weight:800;color:#ec4899;}
+.record-actions{display:flex;gap:2px;margin-top:4px;justify-content:flex-end;}
+.edit-btn{background:none;border:none;color:#9ca3af;font-size:11px;cursor:pointer;padding:2px 6px;}
+.del-btn{background:none;border:none;color:#fca5a5;font-size:11px;cursor:pointer;padding:2px 6px;}
+.footer{text-align:center;padding:16px 0 8px;border-top:1px solid #fde2e8;margin-top:8px;}
+.footer p{margin:0;font-size:11px;color:#9ca3af;line-height:1.6;}
+.footer .hl{font-weight:700;color:#ec4899;}
+.footer .name{font-weight:700;}
+
+/* Form */
+.form-title{margin:0 0 18px;font-size:20px;font-weight:800;color:#ec4899;}
+.form-group{margin-bottom:16px;}
+.form-label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#ec4899;}
+.form-label-yellow{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:#f59e0b;}
+.form-input{width:100%;padding:14px 16px;background:#fff5f7;border:1.5px solid #fde2e8;border-radius:14px;color:#1f2937;font-size:16px;outline:none;font-family:inherit;}
+.holes-row{display:flex;gap:8px;margin-bottom:8px;}
+.hole-btn{flex:1;padding:10px 0;background:#fce7f3;color:#ec4899;border:1.5px solid #fde2e8;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;}
+.hole-btn.active{background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(244,114,182,0.2);}
+.money-display{width:100%;display:flex;align-items:center;padding:0 16px;background:#fff5f7;border:1.5px solid #fde2e8;border-radius:14px;}
+.money-display.has-val{background:#fff;}
+.money-prefix{color:#9ca3af;margin-right:4px;font-size:14px;}
+.money-val{flex:1;border:none;background:transparent;font-size:18px;font-weight:700;color:#1f2937;outline:none;padding:14px 0;font-family:inherit;}
+.reset-btn{background:rgba(239,68,68,0.1);border:none;border-radius:8px;color:#ef4444;font-size:12px;padding:4px 8px;cursor:pointer;font-weight:600;}
+.amt-row{display:flex;gap:8px;margin-top:8px;}
+.amt-btn-pink{flex:1;background:#fce7f3;color:#ec4899;border:1.5px solid #fde2e8;border-radius:12px;padding:11px 0;font-size:14px;font-weight:700;cursor:pointer;}
+.amt-btn-red{flex:1;background:#fff;color:#ef4444;border:1.5px solid #fde2e8;border-radius:12px;padding:11px 0;font-size:14px;font-weight:700;cursor:pointer;}
+.amt-btn-yellow{flex:1;background:#fef3c7;color:#b45309;border:1.5px solid #fde68a;border-radius:12px;padding:11px 0;font-size:14px;font-weight:700;cursor:pointer;}
+.money-display-yellow{width:100%;display:flex;align-items:center;padding:0 16px;border:1.5px solid #fde68a;border-radius:14px;background:#fffef5;}
+.money-display-yellow.has-val{background:#fff;}
+.preview{background:#fff5f7;border:1.5px solid #fde2e8;border-radius:16px;padding:16px;margin-bottom:18px;}
+.preview-title{margin:0 0 10px;font-size:13px;font-weight:700;color:#ec4899;}
+.preview-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:14px;}
+.preview-divider{height:1px;background:#fde2e8;margin:8px 0;}
+.save-btn{width:100%;padding:16px;background:linear-gradient(135deg,#f472b6,#ec4899);color:#fff;border:none;border-radius:14px;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(244,114,182,0.25);font-family:inherit;}
+.cancel-btn{width:100%;padding:14px;background:transparent;color:#9ca3af;border:1px solid #fde2e8;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;font-family:inherit;}
+
+/* List */
+.mini-stats{display:flex;gap:8px;margin-bottom:16px;}
+.mini-stat{flex:1;border-radius:12px;padding:10px 6px;text-align:center;}
+.mini-stat-label{margin:0;font-size:10px;color:#9ca3af;}
+.mini-stat-val{margin:2px 0 0;font-size:13px;font-weight:700;}
+
+/* Stats */
+.tab-bar{display:flex;gap:0;margin-bottom:16px;background:#fce7f3;border-radius:14px;padding:4px;}
+.tab-btn{flex:1;padding:10px 0;border-radius:11px;border:none;font-size:14px;font-weight:700;cursor:pointer;background:transparent;color:#9ca3af;font-family:inherit;}
+.tab-btn.active{background:#fff;color:#ec4899;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.week-card{background:#fff5f7;border:1px solid #fde2e8;border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+.week-header{display:flex;justify-content:space-between;align-items:center;}
+.week-label{font-size:14px;font-weight:700;}
+.week-sub{font-size:11px;color:#9ca3af;margin-left:8px;}
+.week-total{font-size:16px;font-weight:800;color:#ec4899;}
+.week-details{display:flex;gap:10px;margin-top:6px;font-size:12px;}
+.dow-chart{display:flex;gap:6px;align-items:flex-end;height:130px;margin-bottom:8px;padding:0 4px;}
+.dow-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.dow-val{font-size:9px;color:#9ca3af;font-weight:600;}
+.dow-bar{width:100%;border-radius:6px;}
+.dow-name{font-size:12px;font-weight:700;}
+.dow-count{font-size:10px;color:#9ca3af;}
+.year-card{background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:20px;padding:18px;margin-bottom:18px;color:#fff;box-shadow:0 6px 24px rgba(124,58,237,0.15);}
+.monthly-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.monthly-label{width:30px;font-size:12px;color:#9ca3af;text-align:right;flex-shrink:0;}
+.monthly-bar-bg{flex:1;height:24px;background:#fce7f3;border-radius:6px;overflow:hidden;display:flex;}
+.monthly-bar-fee{background:linear-gradient(135deg,#f472b6,#ec4899);height:100%;}
+.monthly-bar-tip{background:linear-gradient(90deg,#f59e0b,#fbbf24);height:100%;}
+.monthly-val{width:65px;font-size:11px;color:#6b7280;text-align:right;flex-shrink:0;font-weight:600;}
+.legend{display:flex;gap:16px;justify-content:center;margin-top:14px;}
+.legend-item{display:flex;align-items:center;gap:5px;}
+.legend-dot{width:10px;height:10px;border-radius:3px;}
+.legend-text{font-size:11px;color:#9ca3af;}
+
+/* Ad Banner */
+.ad-banner{max-width:480px;margin:14px auto;min-height:70px;display:flex;align-items:center;justify-content:center;background:#fff5f7;border:2px dashed #fde2e8;border-radius:14px;color:#d4a0b0;font-size:0.7rem;}
+.ad-banner.active{border:none;min-height:auto;background:transparent;}
+
+/* CSV Button */
+.csv-btn{display:block;margin:18px auto 0;padding:12px 28px;background:linear-gradient(135deg,#34d399,#10b981);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(16,185,129,0.25);font-family:inherit;}
+.csv-btn:active{transform:scale(0.97);}
+
+/* Privacy Link */
+.privacy-link{display:block;text-align:center;margin-top:6px;font-size:10px;color:#d1d5db;text-decoration:none;}
+
+/* Nav */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,251,252,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid #fde2e8;display:flex;padding:6px 0 14px;z-index:20;}
+.nav-btn{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:6px 0;}
+.nav-icon{font-size:22px;}
+.nav-label{font-size:11px;font-weight:700;}
+
+.view-hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-inner">
+      <span class="header-icon">⛳</span>
+      <div>
+        <h1 class="header-title">캐디 수입장부</h1>
+        <p class="header-sub">CADDY INCOME TRACKER 💕</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- HOME -->
+    <div id="view-home">
+      <div class="month-sel">
+        <button class="arrow-btn" onclick="changeMonth(-1)">◀</button>
+        <span class="month-label" id="home-month-label"></span>
+        <button class="arrow-btn" onclick="changeMonth(1)">▶</button>
+      </div>
+      <div class="total-card">
+        <div class="total-card-bg">💰</div>
+        <p class="total-label">이번 달 총 수입 🩷</p>
+        <p class="total-amount" id="home-total"></p>
+        <div class="total-split">
+          <div class="total-split-item">
+            <p class="total-split-label">캐디피 💗</p>
+            <p class="total-split-val" id="home-fee"></p>
+          </div>
+          <div class="total-split-item">
+            <p class="total-split-label">팁 🧡</p>
+            <p class="total-split-val" id="home-tip"></p>
+          </div>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><span class="stat-emoji">📅</span><p class="stat-label">근무일수</p><p class="stat-val" id="home-days"></p></div>
+        <div class="stat-card"><span class="stat-emoji">⛳</span><p class="stat-label">총 홀수</p><p class="stat-val" id="home-holes"></p></div>
+        <div class="stat-card"><span class="stat-emoji">✨</span><p class="stat-label">일평균</p><p class="stat-val" id="home-avg"></p></div>
+      </div>
+      <div>
+        <div class="section-header">
+          <h3 class="section-title">최근 기록</h3>
+          <button class="view-all-btn" id="home-viewall" onclick="switchView('list')">전체보기 →</button>
+        </div>
+        <div id="home-records"></div>
+      </div>
+      <div class="footer">
+        <p>made by. <span class="hl">골프존카운티</span> 드래곤 캐디 <span class="name">이@룡</span></p>
+        <a href="/privacy.html" class="privacy-link">개인정보처리방침</a>
+      </div>
+      <!-- 광고 배너 -->
+      <div class="ad-banner" id="ad-banner-home">📢 광고 영역 (애드센스 승인 후 표시됩니다)</div>
+    </div>
+
+    <!-- ADD -->
+    <div id="view-add" class="view-hidden">
+      <h2 class="form-title" id="form-title">수입 기록하기 ✏️</h2>
+      <div class="form-group">
+        <label class="form-label">📅 날짜</label>
+        <input type="date" id="form-date" class="form-input" style="color-scheme:light;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">⛳ 근무 홀수</label>
+        <div class="holes-row">
+          <button class="hole-btn" onclick="setHoles('18')">18홀</button>
+          <button class="hole-btn" onclick="setHoles('27')">27홀</button>
+          <button class="hole-btn" onclick="setHoles('36')">36홀</button>
+        </div>
+        <input type="number" inputmode="numeric" placeholder="직접 입력 (예: 45)" id="form-holes-input" class="form-input" oninput="setHolesCustom(this.value)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">💗 캐디피 (원)</label>
+        <div class="money-display" id="fee-display">
+          <span class="money-prefix">₩</span>
+          <input type="text" readonly id="fee-val-display" class="money-val" placeholder="아래 버튼으로 입력">
+          <button class="reset-btn" id="fee-reset" onclick="resetFee()" style="display:none;">초기화</button>
+        </div>
+        <div class="amt-row">
+          <button class="amt-btn-pink" onclick="addFee(150000)">+15만</button>
+          <button class="amt-btn-pink" onclick="addFee(160000)">+16만</button>
+          <button class="amt-btn-pink" onclick="addFee(170000)">+17만</button>
+        </div>
+        <div class="amt-row">
+          <button class="amt-btn-red" onclick="addFee(-10000)">-1만</button>
+          <button class="amt-btn-pink" onclick="addFee(10000)">+1만</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label-yellow">🧡 팁 (원)</label>
+        <div class="money-display-yellow" id="tip-display">
+          <span class="money-prefix">₩</span>
+          <input type="text" readonly id="tip-val-display" class="money-val" placeholder="아래 버튼으로 입력">
+          <button class="reset-btn" id="tip-reset" onclick="resetTip()" style="display:none;">초기화</button>
+        </div>
+        <div class="amt-row">
+          <button class="amt-btn-yellow" onclick="addTip(10000)">+1만</button>
+          <button class="amt-btn-yellow" onclick="addTip(20000)">+2만</button>
+          <button class="amt-btn-yellow" onclick="addTip(30000)">+3만</button>
+        </div>
+        <div class="amt-row">
+          <button class="amt-btn-yellow" onclick="addTip(50000)">+5만</button>
+          <button class="amt-btn-yellow" onclick="addTip(100000)">+10만</button>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:22px;">
+        <label class="form-label">📝 메모 (선택)</label>
+        <input type="text" placeholder="예: 버디5개🩷, 비와서 힘들었음" id="form-memo" class="form-input">
+      </div>
+      <div id="form-preview" style="display:none;" class="preview">
+        <p class="preview-title">✨ 입력 확인</p>
+        <div id="preview-content"></div>
+      </div>
+      <button class="save-btn" id="save-btn" onclick="handleSave()">저장하기 🩷</button>
+      <button class="cancel-btn" id="cancel-btn" onclick="cancelEdit()" style="display:none;">취소</button>
+    </div>
+
+    <!-- LIST -->
+    <div id="view-list" class="view-hidden">
+      <div class="month-sel">
+        <button class="arrow-btn" onclick="changeMonth(-1)">◀</button>
+        <span class="month-label" id="list-month-label"></span>
+        <button class="arrow-btn" onclick="changeMonth(1)">▶</button>
+      </div>
+      <div class="mini-stats" id="list-stats"></div>
+      <div id="list-records"></div>
+    </div>
+
+    <!-- STATS -->
+    <div id="view-stats" class="view-hidden">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-month" onclick="setStatsTab('month')">월간 통계</button>
+        <button class="tab-btn" id="tab-year" onclick="setStatsTab('year')">연간 통계</button>
+      </div>
+      <div id="stats-month"></div>
+      <div id="stats-year" style="display:none;"></div>
+      <button class="csv-btn" id="csv-btn" onclick="downloadCSV()">📥 엑셀 다운로드</button>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="switchView('home')"><span class="nav-icon" id="nav-icon-home">🏠</span><span class="nav-label" id="nav-label-home" style="color:#ec4899;">홈</span></button>
+    <button class="nav-btn" onclick="switchView('add')"><span class="nav-icon" id="nav-icon-add">✏️</span><span class="nav-label" id="nav-label-add" style="color:#9ca3af;">입력</span></button>
+    <button class="nav-btn" onclick="switchView('list')"><span class="nav-icon" id="nav-icon-list">📋</span><span class="nav-label" id="nav-label-list" style="color:#9ca3af;">내역</span></button>
+    <button class="nav-btn" onclick="switchView('stats')"><span class="nav-icon" id="nav-icon-stats">📊</span><span class="nav-label" id="nav-label-stats" style="color:#9ca3af;">통계</span></button>
+  </div>
+</div>
+
+<script>
+// State
+var records = [];
+var currentView = "home";
+var selectedYear = new Date().getFullYear();
+var selectedMonth = new Date().getMonth() + 1;
+var editingId = null;
+var formHoles = "";
+var formFee = 0;
+var formTip = 0;
+var statsTab = "month";
+
+var STORAGE_KEY = "caddy_income_records";
+var dayNames = ["일","월","화","수","목","금","토"];
+
+function loadRecords() {
+  try { var s = localStorage.getItem(STORAGE_KEY); records = s ? JSON.parse(s) : []; } catch(e) { records = []; }
+}
+function saveRecords() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); } catch(e) {}
+}
+function fmt(n) { return n === 0 ? "0" : n.toLocaleString("ko-KR"); }
+function getToday() {
+  var d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function parseDate(s) { var p = s.split("-").map(Number); return { year: p[0], month: p[1], day: p[2] }; }
+function getDayName(s) { return dayNames[new Date(s).getDay()]; }
+function getMonthRecords() {
+  return records.filter(function(r) { var d = parseDate(r.date); return d.year === selectedYear && d.month === selectedMonth; })
+    .sort(function(a,b) { return b.date.localeCompare(a.date); });
+}
+
+// Views
+function switchView(v) {
+  if (v === "add" && currentView !== "add") resetForm();
+  currentView = v;
+  ["home","add","list","stats"].forEach(function(k) {
+    document.getElementById("view-" + k).className = k === v ? "" : "view-hidden";
+  });
+  ["home","add","list","stats"].forEach(function(k) {
+    document.getElementById("nav-icon-" + k).style.filter = k === v ? "none" : "grayscale(0.7)";
+    document.getElementById("nav-icon-" + k).style.opacity = k === v ? "1" : "0.45";
+    document.getElementById("nav-label-" + k).style.color = k === v ? "#ec4899" : "#9ca3af";
+  });
+  render();
+}
+
+function changeMonth(dir) {
+  selectedMonth += dir;
+  if (selectedMonth < 1) { selectedMonth = 12; selectedYear--; }
+  if (selectedMonth > 12) { selectedMonth = 1; selectedYear++; }
+  render();
+}
+
+function changeYear(dir) {
+  selectedYear += dir;
+  render();
+}
+
+// Form
+function resetForm() {
+  document.getElementById("form-date").value = getToday();
+  formHoles = ""; formFee = 0; formTip = 0; editingId = null;
+  var hi = document.getElementById("form-holes-input"); if(hi) hi.value = "";
+  var m = document.getElementById("form-memo"); if(m) m.value = "";
+  updateFormUI();
+}
+
+function setHoles(h) {
+  formHoles = h;
+  document.getElementById("form-holes-input").value = "";
+  updateFormUI();
+}
+function setHolesCustom(v) {
+  formHoles = v;
+  updateFormUI();
+}
+function addFee(amt) {
+  formFee = Math.max(0, formFee + amt);
+  updateFormUI();
+}
+function resetFee() { formFee = 0; updateFormUI(); }
+function addTip(amt) { formTip = Math.max(0, formTip + amt); updateFormUI(); }
+function resetTip() { formTip = 0; updateFormUI(); }
+
+function updateFormUI() {
+  // Holes buttons
+  document.querySelectorAll(".hole-btn").forEach(function(btn) {
+    var v = btn.textContent.replace("홀","");
+    btn.className = "hole-btn" + (formHoles === v ? " active" : "");
+  });
+  // Fee display
+  document.getElementById("fee-val-display").value = formFee > 0 ? fmt(formFee) : "";
+  document.getElementById("fee-reset").style.display = formFee > 0 ? "" : "none";
+  document.getElementById("fee-display").className = formFee > 0 ? "money-display has-val" : "money-display";
+  // Tip display
+  document.getElementById("tip-val-display").value = formTip > 0 ? fmt(formTip) : "";
+  document.getElementById("tip-reset").style.display = formTip > 0 ? "" : "none";
+  document.getElementById("tip-display").className = formTip > 0 ? "money-display-yellow has-val" : "money-display-yellow";
+  // Preview
+  var show = formFee > 0 || formTip > 0;
+  document.getElementById("form-preview").style.display = show ? "" : "none";
+  if (show) {
+    var html = "";
+    if (formHoles) html += '<div class="preview-row"><span style="color:#6b7280">근무 홀수</span><span style="font-weight:700">' + formHoles + '홀</span></div>';
+    html += '<div class="preview-row"><span style="color:#ec4899">캐디피</span><span style="font-weight:700">₩' + fmt(formFee) + '</span></div>';
+    html += '<div class="preview-row"><span style="color:#f59e0b">팁</span><span style="font-weight:700;color:#f59e0b">₩' + fmt(formTip) + '</span></div>';
+    html += '<div class="preview-divider"></div>';
+    html += '<div class="preview-row"><span style="font-size:15px;font-weight:800">합계</span><span style="font-size:20px;font-weight:900;color:#ec4899">₩' + fmt(formFee + formTip) + '</span></div>';
+    document.getElementById("preview-content").innerHTML = html;
+  }
+  // Title & buttons
+  document.getElementById("form-title").textContent = editingId ? "수정하기 ✏️" : "수입 기록하기 ✏️";
+  document.getElementById("save-btn").textContent = editingId ? "수정 완료 ✓" : "저장하기 🩷";
+  document.getElementById("cancel-btn").style.display = editingId ? "" : "none";
+}
+
+function handleSave() {
+  var fee = formFee || 0;
+  var tip = formTip || 0;
+  if (fee === 0 && tip === 0) return;
+  var date = document.getElementById("form-date").value;
+  var memo = document.getElementById("form-memo").value;
+  if (editingId !== null) {
+    records = records.map(function(r) { return r.id === editingId ? { id: r.id, date: date, holes: formHoles, fee: fee, tip: tip, memo: memo } : r; });
+  } else {
+    records.push({ id: Date.now(), date: date, holes: formHoles, fee: fee, tip: tip, memo: memo });
+  }
+  saveRecords();
+  resetForm();
+  switchView("list");
+}
+
+function editRecord(id) {
+  var r = records.find(function(x) { return x.id === id; });
+  if (!r) return;
+  document.getElementById("form-date").value = r.date;
+  formHoles = r.holes || "";
+  formFee = r.fee;
+  formTip = r.tip;
+  editingId = r.id;
+  document.getElementById("form-memo").value = r.memo || "";
+  if (["18","27","36"].indexOf(formHoles) === -1 && formHoles) {
+    document.getElementById("form-holes-input").value = formHoles;
+  }
+  updateFormUI();
+  switchView("add");
+}
+
+function deleteRecord(id) {
+  if (confirm("정말 삭제하시겠습니까?")) {
+    records = records.filter(function(r) { return r.id !== id; });
+    saveRecords();
+    render();
+  }
+}
+
+function cancelEdit() { resetForm(); switchView("list"); }
+
+function makeRecordHTML(r, showActions) {
+  var d = parseDate(r.date);
+  var total = r.fee + r.tip;
+  var html = '<div class="record-row"><div class="record-inner"><div>';
+  html += '<div class="record-tags">';
+  html += '<span class="record-date">' + d.month + '/' + d.day + '</span>';
+  html += '<span class="record-tag">' + getDayName(r.date) + '</span>';
+  if (r.holes) html += '<span class="record-tag-pink">' + r.holes + '홀</span>';
+  if (r.memo) html += '<span class="record-memo">' + r.memo + '</span>';
+  html += '</div>';
+  html += '<div class="record-details">';
+  html += '<span class="record-fee">캐디피 ₩' + fmt(r.fee) + '</span>';
+  if (r.tip > 0) html += '<span class="record-tip">팁 ₩' + fmt(r.tip) + '</span>';
+  html += '</div></div>';
+  html += '<div style="text-align:right"><p class="record-total">₩' + fmt(total) + '</p>';
+  if (showActions) {
+    html += '<div class="record-actions"><button class="edit-btn" onclick="editRecord(' + r.id + ')">수정</button>';
+    html += '<button class="del-btn" onclick="deleteRecord(' + r.id + ')">삭제</button></div>';
+  }
+  html += '</div></div></div>';
+  return html;
+}
+
+function setStatsTab(tab) {
+  statsTab = tab;
+  document.getElementById("tab-month").className = tab === "month" ? "tab-btn active" : "tab-btn";
+  document.getElementById("tab-year").className = tab === "year" ? "tab-btn active" : "tab-btn";
+  document.getElementById("stats-month").style.display = tab === "month" ? "" : "none";
+  document.getElementById("stats-year").style.display = tab === "year" ? "" : "none";
+  render();
+}
+
+function downloadCSV() {
+  var targetRecords, filename;
+  if (statsTab === "year") {
+    targetRecords = records.filter(function(r) { return parseDate(r.date).year === selectedYear; })
+      .sort(function(a,b) { return a.date.localeCompare(b.date); });
+    filename = "캐디수입_" + selectedYear + "년.csv";
+  } else {
+    targetRecords = getMonthRecords().sort(function(a,b) { return a.date.localeCompare(b.date); });
+    filename = "캐디수입_" + selectedYear + "년" + selectedMonth + "월.csv";
+  }
+  if (targetRecords.length === 0) { alert("내보낼 기록이 없습니다."); return; }
+
+  var bom = "\uFEFF";
+  var csv = bom + "날짜,근무홀수,캐디피,합계\n";
+  var totalFee = 0;
+  targetRecords.forEach(function(r) {
+    totalFee += r.fee;
+    csv += r.date + "," + (r.holes || "") + "," + r.fee + "," + r.fee + "\n";
+  });
+  csv += "\n합계,," + totalFee + "," + totalFee + "\n";
+
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  var link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+function render() {
+  var mr = getMonthRecords();
+  var totalFee = mr.reduce(function(s,r){return s+r.fee;},0);
+  var totalTip = mr.reduce(function(s,r){return s+r.tip;},0);
+  var totalIncome = totalFee + totalTip;
+  var workDays = mr.length;
+  var totalHoles = mr.reduce(function(s,r){return s+(parseInt(r.holes)||0);},0);
+  var avg = workDays ? Math.round(totalIncome / workDays) : 0;
+
+  // Month labels
+  var ml = selectedYear + "년 " + selectedMonth + "월";
+  var hml = document.getElementById("home-month-label"); if(hml) hml.textContent = ml;
+  var lml = document.getElementById("list-month-label"); if(lml) lml.textContent = ml;
+
+  // Home
+  if (currentView === "home") {
+    document.getElementById("home-total").textContent = "₩" + fmt(totalIncome);
+    document.getElementById("home-fee").textContent = "₩" + fmt(totalFee);
+    document.getElementById("home-tip").textContent = "₩" + fmt(totalTip);
+    document.getElementById("home-days").textContent = workDays + "일";
+    document.getElementById("home-holes").textContent = totalHoles + "홀";
+    document.getElementById("home-avg").textContent = "₩" + fmt(avg);
+    document.getElementById("home-viewall").style.display = mr.length > 0 ? "" : "none";
+    var rhtml = "";
+    if (mr.length === 0) {
+      rhtml = '<div class="empty"><p class="empty-icon">🏌️‍♀️</p><p class="empty-title">아직 기록이 없어요!</p><p class="empty-sub">오늘의 수입을 기록해볼까요?</p><button class="pink-btn" onclick="switchView(\'add\')">첫 수입 기록하기 ✏️</button></div>';
+    } else {
+      mr.slice(0,5).forEach(function(r) { rhtml += makeRecordHTML(r, true); });
+    }
+    document.getElementById("home-records").innerHTML = rhtml;
+  }
+
+  // List
+  if (currentView === "list") {
+    var shtml = '<div class="mini-stat" style="background:#fce7f3"><p class="mini-stat-label">캐디피</p><p class="mini-stat-val" style="color:#ec4899">₩' + fmt(totalFee) + '</p></div>';
+    shtml += '<div class="mini-stat" style="background:#fef3c7"><p class="mini-stat-label">팁</p><p class="mini-stat-val" style="color:#b45309">₩' + fmt(totalTip) + '</p></div>';
+    shtml += '<div class="mini-stat" style="background:#fff5f7"><p class="mini-stat-label">합계</p><p class="mini-stat-val" style="color:#1f2937">₩' + fmt(totalIncome) + '</p></div>';
+    document.getElementById("list-stats").innerHTML = shtml;
+    var lhtml = "";
+    if (mr.length === 0) {
+      lhtml = '<div style="text-align:center;padding:40px 20px;color:#9ca3af"><p style="font-size:14px">이 달의 기록이 없습니다 🥲</p></div>';
+    } else {
+      mr.forEach(function(r) { lhtml += makeRecordHTML(r, true); });
+    }
+    document.getElementById("list-records").innerHTML = lhtml;
+  }
+
+  // Stats
+  if (currentView === "stats") {
+    if (statsTab === "month") {
+      var smhtml = '<div class="month-sel"><button class="arrow-btn" onclick="changeMonth(-1)">◀</button><span class="month-label">' + ml + '</span><button class="arrow-btn" onclick="changeMonth(1)">▶</button></div>';
+      smhtml += '<div class="total-card" style="border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 6px 24px rgba(244,114,182,0.15);">';
+      smhtml += '<p style="margin:0 0 2px;font-size:13px;opacity:0.85">' + selectedMonth + '월 총 수입</p>';
+      smhtml += '<p style="margin:0 0 12px;font-size:30px;font-weight:900">₩' + fmt(totalIncome) + '</p>';
+      smhtml += '<div style="display:flex;gap:8px">';
+      [{l:"캐디피",v:"₩"+fmt(totalFee)},{l:"팁",v:"₩"+fmt(totalTip)},{l:"근무",v:workDays+"일 / "+totalHoles+"홀"}].forEach(function(it){
+        smhtml += '<div style="flex:1;background:rgba(255,255,255,0.2);border-radius:12px;padding:8px 10px"><p style="margin:0;font-size:10px;opacity:0.85">' + it.l + '</p><p style="margin:2px 0 0;font-size:14px;font-weight:800">' + it.v + '</p></div>';
+      });
+      smhtml += '</div></div>';
+
+      // Weekly
+      var weeks = {};
+      mr.forEach(function(r) {
+        var wn = Math.ceil(new Date(r.date).getDate() / 7);
+        if (!weeks[wn]) weeks[wn] = {fee:0,tip:0,total:0,days:0,holes:0};
+        weeks[wn].fee += r.fee; weeks[wn].tip += r.tip; weeks[wn].total += r.fee + r.tip; weeks[wn].days++; weeks[wn].holes += parseInt(r.holes)||0;
+      });
+      smhtml += '<h3 style="margin:0 0 10px;font-size:14px;font-weight:700;color:#6b7280">📅 주차별 수입</h3>';
+      var wkeys = Object.keys(weeks).sort();
+      if (wkeys.length === 0) {
+        smhtml += '<p style="font-size:13px;color:#9ca3af;text-align:center;padding:20px">기록이 없습니다</p>';
+      } else {
+        wkeys.forEach(function(w) {
+          var wd = weeks[w];
+          smhtml += '<div class="week-card"><div class="week-header"><div><span class="week-label">' + w + '주차</span><span class="week-sub">' + wd.days + '일 · ' + wd.holes + '홀</span></div><span class="week-total">₩' + fmt(wd.total) + '</span></div>';
+          smhtml += '<div class="week-details"><span style="color:#f472b6">캐디피 ₩' + fmt(wd.fee) + '</span><span style="color:#f59e0b">팁 ₩' + fmt(wd.tip) + '</span></div></div>';
+        });
+      }
+
+      // DOW
+      var dowStats = [];
+      for (var i=0;i<7;i++) dowStats.push({count:0,total:0});
+      mr.forEach(function(r) { var dow = new Date(r.date).getDay(); dowStats[dow].count++; dowStats[dow].total += r.fee + r.tip; });
+      var maxDow = Math.max.apply(null, dowStats.map(function(d){return d.total;}));
+      if (maxDow === 0) maxDow = 1;
+
+      smhtml += '<h3 style="margin:16px 0 10px;font-size:14px;font-weight:700;color:#6b7280">📊 요일별 수입</h3>';
+      smhtml += '<div class="dow-chart">';
+      dowStats.forEach(function(s, i) {
+        var h = s.total > 0 ? Math.max((s.total / maxDow) * 90, 8) : 4;
+        var bg = i===0?"linear-gradient(180deg,#fca5a5,#f87171)":i===6?"linear-gradient(180deg,#93c5fd,#60a5fa)":"linear-gradient(135deg,#f472b6,#ec4899)";
+        var nc = i===0?"#ef4444":i===6?"#3b82f6":"#6b7280";
+        smhtml += '<div class="dow-col"><span class="dow-val">' + (s.total>0?Math.round(s.total/10000)+"만":"") + '</span>';
+        smhtml += '<div class="dow-bar" style="height:' + h + 'px;background:' + bg + '"></div>';
+        smhtml += '<span class="dow-name" style="color:' + nc + '">' + dayNames[i] + '</span>';
+        smhtml += '<span class="dow-count">' + s.count + '일</span></div>';
+      });
+      smhtml += '</div>';
+      document.getElementById("stats-month").innerHTML = smhtml;
+    }
+
+    if (statsTab === "year") {
+      var yr = records.filter(function(r){return parseDate(r.date).year===selectedYear;});
+      var yFee = yr.reduce(function(s,r){return s+r.fee;},0);
+      var yTip = yr.reduce(function(s,r){return s+r.tip;},0);
+      var yTotal = yFee + yTip;
+      var yDays = yr.length;
+
+      var syhtml = '<div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px">';
+      syhtml += '<button class="arrow-btn" onclick="changeYear(-1)">◀</button>';
+      syhtml += '<span style="font-size:18px;font-weight:700">' + selectedYear + '년</span>';
+      syhtml += '<button class="arrow-btn" onclick="changeYear(1)">▶</button></div>';
+
+      syhtml += '<div class="year-card">';
+      syhtml += '<p style="margin:0 0 2px;font-size:13px;opacity:0.85">연간 총 수입 ✨</p>';
+      syhtml += '<p style="margin:0 0 12px;font-size:30px;font-weight:900">₩' + fmt(yTotal) + '</p>';
+      syhtml += '<div style="display:flex;gap:8px">';
+      [{l:"캐디피",v:"₩"+fmt(yFee)},{l:"팁",v:"₩"+fmt(yTip)},{l:"근무일수",v:yDays+"일"}].forEach(function(it){
+        syhtml += '<div style="flex:1;background:rgba(255,255,255,0.2);border-radius:12px;padding:8px 10px"><p style="margin:0;font-size:10px;opacity:0.85">' + it.l + '</p><p style="margin:2px 0 0;font-size:15px;font-weight:800">' + it.v + '</p></div>';
+      });
+      syhtml += '</div></div>';
+
+      // Monthly bars
+      var mbd = [];
+      for (var mi=1;mi<=12;mi++) {
+        var mrs2 = records.filter(function(r){var d=parseDate(r.date);return d.year===selectedYear&&d.month===mi;});
+        mbd.push({month:mi,fee:mrs2.reduce(function(s,r){return s+r.fee;},0),tip:mrs2.reduce(function(s,r){return s+r.tip;},0),total:mrs2.reduce(function(s,r){return s+r.fee+r.tip;},0)});
+      }
+      var maxMT = Math.max.apply(null,mbd.map(function(m){return m.total;}));
+      if (maxMT===0) maxMT=1;
+
+      syhtml += '<h3 style="margin:0 0 10px;font-size:14px;font-weight:700;color:#6b7280">월별 수입</h3>';
+      mbd.forEach(function(m) {
+        syhtml += '<div class="monthly-row"><span class="monthly-label">' + m.month + '월</span>';
+        syhtml += '<div class="monthly-bar-bg"><div class="monthly-bar-fee" style="width:' + (m.fee/maxMT*100) + '%"></div><div class="monthly-bar-tip" style="width:' + (m.tip/maxMT*100) + '%"></div></div>';
+        syhtml += '<span class="monthly-val">' + (m.total>0?fmt(m.total):"-") + '</span></div>';
+      });
+      syhtml += '<div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div><span class="legend-text">캐디피</span></div>';
+      syhtml += '<div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div><span class="legend-text">팁</span></div></div>';
+      document.getElementById("stats-year").innerHTML = syhtml;
+    }
+  }
+}
+
+// Init
+loadRecords();
+render();
+</script>
+</body>
+</html>
