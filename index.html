@@ -23,7 +23,6 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="AION2">
 <link rel="apple-touch-icon" href="./icon-192.png">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4764115622535026" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -170,7 +169,6 @@
   .footer-links a:hover{color:var(--accent-blue)}
   /* 광고 배너 영역 */
   .ad-banner{max-width:900px;margin:14px auto;min-height:90px;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:2px dashed var(--border-light);border-radius:14px;color:var(--text-muted);font-size:0.7rem;box-shadow:var(--shadow-soft)}
-  .ad-banner.active{border:none;min-height:auto;background:transparent;box-shadow:none}
   /* PWA 설치 배너 */
   .install-banner{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#d0f0ff,#e8d8ff);border-top:2px solid var(--accent-blue);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:150;box-shadow:0 -4px 16px rgba(74,189,232,0.15);animation:slideUp 0.4s ease}
   .install-banner .install-text{font-size:0.78rem;font-weight:500;color:var(--text-primary)}
@@ -493,7 +491,6 @@ function App(){
       )}
       <div className="footer-credit">Made by. 비치/조아/위니/바닐라 — 브리트라 서버</div>
       <div className="footer-links"><a href="./guide.html" target="_blank">📖 사용법 안내</a>{' · '}<a href="./privacy.html" target="_blank">개인정보처리방침</a></div>
-      {/* 하단 광고 배너 */}
       <AdBanner/>
       <button className="settings-btn" onClick={()=>setShowSettings(true)}>⚙️</button>
       {showSettings&&<SettingsModal currentCount={charCount} onSave={handleCountChange} onClose={()=>setShowSettings(false)}/>}
@@ -502,21 +499,10 @@ function App(){
   );
 }
 
-/* 광고 배너 컴포넌트 - 애드센스 승인 후 활성화 */
+/* 광고 배너 컴포넌트 */
 function AdBanner(){
-  const adRef=React.useRef(null);
-  const[adActive,setAdActive]=useState(false);
-  React.useEffect(()=>{
-    try{
-      if(window.adsbygoogle&&adRef.current){
-        (window.adsbygoogle=window.adsbygoogle||[]).push({});
-        setAdActive(true);
-      }
-    }catch(e){}
-  },[]);
   return(
-    <div className={`ad-banner ${adActive?'active':''}`}>
-      {/* 자동 광고가 활성화되면 구글이 알아서 최적의 위치에 광고를 배치합니다 */}
+    <div className="ad-banner">
     </div>
   );
 }
