@@ -8,7 +8,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#fff0f3">
 <title>캐디 수입장부</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛳</text></svg>">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192x192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192x192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -740,6 +742,13 @@ function render() {
 // Init
 loadRecords();
 render();
+
+// Service Worker 등록
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(function(e) {
+    console.log('SW registration failed:', e);
+  });
+}
 </script>
 </body>
 </html>
