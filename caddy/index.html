@@ -749,6 +749,30 @@ if ('serviceWorker' in navigator) {
     console.log('SW registration failed:', e);
   });
 }
+
+// 자동 업데이트 체크
+var APP_VERSION = "1.0.0";
+function checkUpdate() {
+  fetch('version.json?t=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.version && data.version !== APP_VERSION) {
+        if ('caches' in window) {
+          caches.keys().then(function(names) {
+            names.forEach(function(name) { caches.delete(name); });
+          });
+        }
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(reg) { reg.unregister(); });
+          });
+        }
+        setTimeout(function() { location.reload(true); }, 500);
+      }
+    })
+    .catch(function(e) {});
+}
+checkUpdate();
 </script>
 </body>
 </html>
