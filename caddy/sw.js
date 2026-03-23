@@ -5,6 +5,7 @@ var urlsToCache = [
 ];
 
 self.addEventListener('install', function(event) {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(urlsToCache);
@@ -27,6 +28,8 @@ self.addEventListener('activate', function(event) {
         names.filter(function(name) { return name !== CACHE_NAME; })
           .map(function(name) { return caches.delete(name); })
       );
+    }).then(function() {
+      return self.clients.claim();
     })
   );
 });
