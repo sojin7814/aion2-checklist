@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AION2 디지털 시계</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box}
+
+  body{
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:#06060e;
+    overflow:hidden;
+    font-family:'Rajdhani',sans-serif;
+  }
+
+  /* ── Background ── */
+  .bg{position:fixed;inset:0;z-index:0}
+  .bg::before{
+    content:'';position:absolute;inset:-50%;
+    background:
+      radial-gradient(ellipse 600px 400px at 20% 30%,rgba(0,120,255,.06) 0%,transparent 70%),
+      radial-gradient(ellipse 500px 500px at 80% 70%,rgba(80,0,220,.05) 0%,transparent 70%),
+      radial-gradient(ellipse 300px 300px at 50% 50%,rgba(0,200,255,.03) 0%,transparent 70%);
+    animation:bgP 8s ease-in-out infinite alternate;
+  }
+  @keyframes bgP{0%{transform:scale(1) rotate(0)}100%{transform:scale(1.1) rotate(2deg)}}
+
+  .grid{
+    position:fixed;inset:0;z-index:0;
+    background-image:
+      linear-gradient(rgba(0,140,255,.025) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(0,140,255,.025) 1px,transparent 1px);
+    background-size:50px 50px;
+    animation:gd 25s linear infinite;
+  }
+  @keyframes gd{0%{background-position:0 0}100%{background-position:50px 50px}}
+
+  .particles{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .particle{
+    position:absolute;width:2px;height:2px;
+    background:rgba(0,180,255,.35);border-radius:50%;
+    animation:rise linear infinite;
+  }
+  @keyframes rise{
+    0%{transform:translateY(100vh) scale(0);opacity:0}
+    10%{opacity:1}90%{opacity:1}
+    100%{transform:translateY(-10vh) scale(1);opacity:0}
+  }
+
+  /* ── Clock ── */
+  .wrap{
+    position:relative;z-index:10;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+
+  .lbl-top{
+    font-weight:300;font-size:13px;
+    letter-spacing:14px;text-transform:uppercase;
+    color:rgba(0,180,255,.45);text-indent:14px;
+  }
+
+  .box{
+    position:relative;
+    padding:36px 52px 28px;
+    border:1px solid rgba(0,150,255,.12);
+    background:rgba(4,6,18,.88);
+    backdrop-filter:blur(24px);
+  }
+
+  .box::before,.box::after,.c-tr,.c-bl{
+    content:'';position:absolute;
+    width:14px;height:14px;
+    border-style:solid;border-color:rgba(0,180,255,.35);
+  }
+  .box::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+  .box::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+  .c-tr{top:-1px;right:-1px;border-width:2px 2px 0 0}
+  .c-bl{bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+
+  .glow-bar{
+    position:absolute;top:0;left:18%;width:64%;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(0,180,255,.55),transparent);
+    animation:gp 3s ease-in-out infinite;
+  }
+  @keyframes gp{0%,100%{opacity:.35}50%{opacity:1}}
+
+  .scan{
+    position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,rgba(0,180,255,.12),transparent);
+    animation:sc 4.5s linear infinite;pointer-events:none;
+  }
+  @keyframes sc{0%{top:0}100%{top:100%}}
+
+  .kst{
+    position:absolute;top:10px;right:14px;
+    font-family:'Orbitron',monospace;
+    font-size:9px;font-weight:400;
+    color:rgba(0,255,170,.45);letter-spacing:2px;
+    padding:2px 7px;border:1px solid rgba(0,255,170,.12);
+  }
+
+  /* ── Digits ── */
+  .time-row{
+    display:flex;align-items:baseline;
+    font-family:'Orbitron',monospace;line-height:1;
+  }
+
+  .d{
+    font-size:76px;font-weight:700;
+    color:#dceeff;
+    text-shadow:0 0 24px rgba(0,140,255,.35),0 0 64px rgba(0,100,255,.12);
+    letter-spacing:3px;min-width:95px;text-align:center;
+  }
+
+  .col{
+    font-size:72px;font-weight:700;
+    color:rgba(0,180,255,.6);margin:0 1px;
+    animation:bk 1s step-end infinite;
+  }
+  @keyframes bk{0%,100%{opacity:1}50%{opacity:.2}}
+
+  .dot{
+    font-size:50px;font-weight:700;
+    color:rgba(0,180,255,.6);
+    position:relative;top:-3px;margin:0 2px;
+  }
+
+  .cs{
+    font-size:40px;font-weight:500;
+    color:rgba(0,210,255,.75);min-width:64px;
+    text-shadow:0 0 16px rgba(0,180,255,.25);
+    position:relative;top:-1px;
+  }
+
+  /* ── Date ── */
+  .date-row{display:flex;align-items:center;gap:14px;margin-top:14px}
+  .dt{font-size:16px;font-weight:500;color:rgba(170,205,255,.55);letter-spacing:3px}
+  .dl{width:32px;height:1px;background:rgba(0,150,255,.25)}
+  .dy{font-size:14px;font-weight:400;color:rgba(0,200,255,.45);letter-spacing:4px;text-transform:uppercase}
+
+  .lbl-bot{
+    font-weight:400;font-size:11px;
+    letter-spacing:7px;color:rgba(0,180,255,.2);text-indent:7px;
+  }
+
+  .credit{
+    font-family:'Rajdhani',sans-serif;
+    font-weight:400;font-size:9px;
+    letter-spacing:4px;color:rgba(0,180,255,.15);
+    text-indent:4px;margin-top:2px;
+  }
+
+  /* ── Responsive ── */
+  @media(max-width:640px){
+    .d{font-size:44px;min-width:56px}
+    .col{font-size:42px}
+    .dot{font-size:30px}
+    .cs{font-size:24px;min-width:40px}
+    .box{padding:28px 24px 20px}
+    .lbl-top{font-size:10px;letter-spacing:8px}
+    .dt{font-size:13px}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="grid"></div>
+<div class="particles" id="ptc"></div>
+
+<div class="wrap">
+  <div class="lbl-top">AION2 TIMER</div>
+  <div class="box">
+    <div class="c-tr"></div>
+    <div class="c-bl"></div>
+    <div class="glow-bar"></div>
+    <div class="scan"></div>
+    <div class="kst">KST UTC+9</div>
+
+    <div class="time-row">
+      <span class="d" id="hh">00</span>
+      <span class="col">:</span>
+      <span class="d" id="mm">00</span>
+      <span class="col">:</span>
+      <span class="d" id="ss">00</span>
+      <span class="dot">.</span>
+      <span class="cs" id="cs">00</span>
+    </div>
+
+    <div class="date-row">
+      <span class="dt" id="dateEl">2025.01.01</span>
+      <span class="dl"></span>
+      <span class="dy" id="dayEl">MONDAY</span>
+    </div>
+  </div>
+  <div class="lbl-bot">KOREA STANDARD TIME</div>
+  <div class="credit">MADE BY 브리트라 비치 · 조아</div>
+</div>
+
+<script>
+/* ── Particles ── */
+!function(){
+  var c=document.getElementById('ptc');
+  for(var i=0;i<28;i++){
+    var p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(7+Math.random()*10)+'s';
+    p.style.animationDelay=(Math.random()*12)+'s';
+    var s=1+Math.random()*2;
+    p.style.width=p.style.height=s+'px';
+    c.appendChild(p);
+  }
+}();
+
+/* ── Precision Clock ── */
+var DAYS=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+
+var $hh=document.getElementById('hh');
+var $mm=document.getElementById('mm');
+var $ss=document.getElementById('ss');
+var $cs=document.getElementById('cs');
+var $date=document.getElementById('dateEl');
+var $day=document.getElementById('dayEl');
+
+function pad(n){return n<10?'0'+n:''+n}
+
+/*
+  performance.now()로 부드러운 센티초 렌더링,
+  Date.now()에 앵커링해서 KST 절대 시각 보장.
+  30초마다 재동기화로 드리프트 방지.
+*/
+var anchorPerf=performance.now();
+var anchorDate=Date.now();
+
+setInterval(function(){
+  anchorPerf=performance.now();
+  anchorDate=Date.now();
+},30000);
+
+function tick(){
+  var elapsed=performance.now()-anchorPerf;
+  var nowMs=anchorDate+elapsed;
+
+  // KST = UTC + 9h
+  var utcMs=nowMs+(new Date().getTimezoneOffset()*60000);
+  var kst=new Date(utcMs+9*3600000);
+
+  $hh.textContent=pad(kst.getHours());
+  $mm.textContent=pad(kst.getMinutes());
+  $ss.textContent=pad(kst.getSeconds());
+  $cs.textContent=pad(Math.floor(kst.getMilliseconds()/10));
+
+  $date.textContent=kst.getFullYear()+'.'+pad(kst.getMonth()+1)+'.'+pad(kst.getDate());
+  $day.textContent=DAYS[kst.getDay()];
+
+  requestAnimationFrame(tick);
+}
+
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>
